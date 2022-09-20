@@ -5,16 +5,16 @@
 <head>
 <meta charset="UTF-8">
 <title>Insert title here</title>
-<link rel="stylesheet" href="style.css">
+<link rel="stylesheet" href="../style.css">
 </head>
 <body>
-<%@ include file="header.jsp" %>
-<%@ include file="nav.jsp" %>
+<%@ include file="../header.jsp" %>
+<%@ include file="../nav.jsp" %>
 <section>
 	<form name="form" method="post">
 		
 	</form>
 </section>
-<%@ include file="footer.jsp" %>
+<%@ include file="../footer.jsp" %>
 </body>
 </html>
