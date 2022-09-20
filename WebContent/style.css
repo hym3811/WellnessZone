@@ -75,3 +75,33 @@ footer{
 	transition:0.7s;
 	
 }
+.schedule_line{
+	width:1050px;
+	height:100px;
+	margin: 0 auto;
+}
+.schedule_line > div{
+	float:left;
+}
+.schedule_week{
+	width:148px;
+	height:28px;
+	border:1px solid black;
+	text-align:center;
+	font-weight:bold;
+	line-height:175%;
+}
+.schedule_select{
+	width:200px;
+	height:50px;
+	font-size:2.5em;
+	text-align:center;
+}
+.schedule_btn{
+	width:50px;
+	height:50px;
+	border:1px dashed red;
+	font-size:2em;
+	text-align:center;
+	padding-top:-10px;
+}
