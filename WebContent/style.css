@@ -28,6 +28,7 @@ nav ul li{
 	line-height:300%;
 }
 section{
+	clear:both;
 	height:calc(100% - 200px);
 }
 footer{

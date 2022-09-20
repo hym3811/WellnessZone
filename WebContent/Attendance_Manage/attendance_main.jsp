@@ -12,7 +12,7 @@
 <%@ include file="../nav.jsp" %>
 <section>
 	<form name="form" method="post">
-		<h3 class="title">일정</h3>
+		<h3 class="title">출결관리</h3>
 	</form>
 </section>
 <%@ include file="../footer.jsp" %>
