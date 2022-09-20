@@ -2,6 +2,7 @@
     pageEncoding="UTF-8"%>
 <%@ include file = "DB.jsp"%>
 <%@ page import = "java.util.*" %>
+<%@ page import = "java_class.Close" %>
 <%
 	PreparedStatement pstmt = null;
 	ResultSet rs = null;
@@ -56,6 +57,8 @@
 					
 					//있으면 당월 테이블 생성되어있으므로 로그인 성공
 					if(rs.next()){
+						Close.close(pstmt);
+						Close.close(rs);
 						%>
 						<script>
 						location.href="Timestamp/timestamp_main.jsp";
@@ -64,7 +67,7 @@
 						
 					//없으면 당월 테이블이 없으므로 당월 테이블 생성함
 					}else{
-						int i=1;	// 오늘 날짜의 일수에 더할 변수
+						int i=0;	// 오늘 날짜의 일수에 더할 변수
 						ArrayList<String> account = new ArrayList<String>();	// 마스터 계정을 제외한 계정의 id 리스트
 						
 						sql = "select id from wellness_account where rank>1";
@@ -74,15 +77,18 @@
 							account.add(rs.getString(1));
 						}
 						
+						String start = year+"/"+month+"/1";
+						
 						while(true){
 							// i변수를 더한 날짜와 그 날짜의 요일을 받아옴
-							sql = "select sysdate+"+i+",to_char(sysdate+"+i+",'d') from dual";
+							sql = "select trunc(sysdate,'mm')+"+i+",to_char(trunc(sysdate,'MM')+"+i+",'d') from dual";
 							pstmt = conn.prepareStatement(sql);
 							rs = pstmt.executeQuery();
 							
 							String temp = null; // i변수를 더한 날짜
 							int week = 0; // 요일 값을 받아올 변수
 							if(rs.next()){
+								System.out.println(rs.getString(1));
 								temp = rs.getString(1);
 								week = rs.getInt(2);
 
@@ -95,7 +101,7 @@
 										pstmt = conn.prepareStatement(sql);
 										pstmt.setString(1, year);
 										pstmt.setString(2, month);
-										pstmt.setInt(3, Integer.parseInt(day)+i);
+										pstmt.setInt(3, 1+i);
 										pstmt.setInt(4, week);
 										pstmt.setString(5, account.get(j));
 										switch(week){
@@ -117,6 +123,8 @@
 							}
 							i++;
 						}
+						Close.close(pstmt);
+						Close.close(rs);
 						%>
 						<script>
 						location.href="Timestamp/timestamp_main.jsp";

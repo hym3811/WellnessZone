@@ -4,17 +4,18 @@ create table wellness_account(
 	pass varchar2(12) not null,
 	name varchar2(12) not null,
 	rank char(1) not null,
-	position varchar2(20));
+	position varchar2(20),
+	out number(1));
 
-insert into wellness_account values('manager','master5580','마스터',1,'마스터계정');
-insert into wellness_account values('a1234','1234','홍길동',3,'관리사');
-insert into wellness_account values('b1234','1234','강감찬',2,'매니저');
+insert into wellness_account values('manager','master5580','마스터',1,'마스터계정',1);
+insert into wellness_account values('a1234','1234','홍길동',3,'관리사',1);
+insert into wellness_account values('b1234','1234','강감찬',2,'매니저',1);
 
 drop table wellness_work;
 create table wellness_work(
-	year varchar2(4),
-	month varchar2(2),
-	day varchar2(2),
+	year number(4),
+	month number(2),
+	day number(2),
 	week number(1),
 	id varchar2(12),
 	enter timestamp,

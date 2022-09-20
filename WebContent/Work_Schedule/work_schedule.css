@@ -1,0 +1,53 @@
+@charset "UTF-8";
+.schedule_line{
+	width:1050px;
+	height:80px;
+	margin: 0 auto;
+}
+.schedule_line > div{
+	float:left;
+}
+.schedule_week{
+	width:148px;
+	height:28px;
+	border:1px solid black;
+	text-align:center;
+	font-weight:bold;
+	line-height:175%;
+}
+.schedule_box{
+	position:relative;
+	width:148px;
+	height:78px;
+	border:1px solid black;
+	text-align:center;
+	font-weight:bold;
+}
+.schedule_day{
+	position:absolute;
+	right:2px;
+	top:2px;
+}
+.schedule_select{
+	width:150px;
+	height:50px;
+	font-size:2.5em;
+	text-align:center;
+	line-height:40px;
+}
+.schedule_btn{
+	width:50px;
+	height:50px;
+	font-size:2em;
+	text-align:center;
+	line-height:40px;
+}
+.schedule_btn:hover{
+	cursor:pointer;
+	color:orange;
+}
+.schedule_btn:active{
+	cursor:pointer;
+	color:red;
+	
+}

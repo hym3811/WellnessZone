@@ -6,6 +6,8 @@ name	/	varchar2(12)	/	not null
 rank	/	number(1)			/	not null
 position/	varchar2(20)
 			=> 1: 마스터 계정 / 2: 관리자 / 3: 직원
+out		/	number(1)
+			=> 0: 퇴사 / 1: 재직
 
 => sql
 drop table wellness_account;
@@ -14,7 +16,8 @@ create table wellness_account(
 	pass varchar2(12) not null,
 	name varchar2(12) not null,
 	rank char(1) not null,
-	position varchar2(20));
+	position varchar2(20),
+	out number(1));
 
 insert into wellness_account values('manager','master5580','마스터',1,'마스터계정');
 
@@ -38,9 +41,9 @@ work	/	varchar2(3)		/	not null
 => sql
 drop table wellness_work;
 create table wellness_work(
-	year varchar2(4),
-	month varchar2(2),
-	day varchar2(2),
+	year number(4),
+	month number(2),
+	day number(2),
 	week number(1),
 	id varchar2(12),
 	enter timestamp,
