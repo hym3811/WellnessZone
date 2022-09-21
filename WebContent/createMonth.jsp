@@ -9,7 +9,7 @@
 	
 	try{
 		String year = "2022";
-		String month = "07";
+		String month = "11";
 		int i=0;	// 오늘 날짜의 일수에 더할 변수
 		ArrayList<String> account = new ArrayList<String>();	// 마스터 계정을 제외한 계정의 id 리스트
 		

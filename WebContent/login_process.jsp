@@ -106,10 +106,20 @@
 										pstmt.setString(5, account.get(j));
 										switch(week){
 										case 2:
+											pstmt.setString(6, "0");
+											break;
 										case 3:
+											pstmt.setString(6, "0");
+											break;
 										case 4:
+											pstmt.setString(6, "0");
+											break;
 										case 5:
+											pstmt.setString(6, "0");
+											break;
 										case 6:
+											pstmt.setString(6, "0");
+											break;
 										case 7:
 											pstmt.setString(6, "0");
 											break;

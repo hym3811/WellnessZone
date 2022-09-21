@@ -29,8 +29,19 @@
 	top:0px;
 	width:20px;
 	height:20px;
-	border-left:1px solid black;
-	border-bottom:1px solid black;
+	color:white;
+}
+.schedule_day:hover{
+	width:30px;
+	height:30px;
+	font-size:1.5em;
+	cursor:pointer;
+	right:-5px;
+	top:-5px;
+	z-index:9;
+	background-color:orange!important;
+	border-radius:5px;
+	transition:0.3s;
 }
 .schedule_select{
 	width:150px;
@@ -61,11 +72,28 @@
 .worker_list{
 	list-style:none;
 	text-align:left;
-	text-indent:5px;
+	text-indent:10px;
 	float:left;
 }
 .worker_list:hover{
 	color:red;
 	font-weight:bold;
 	cursor:pointer;
+	text-decoration:underline;
+}
+.personal_list{
+	list-style:none;
+	text-align:left;
+	text-indent:15px;
+}
+.save_btn{
+	background-color:#393939;
+	color:white;
+	font-weight:bold;
+	width:60px;
+	height:30px;
+	margin-left:calc(75% - 15px);
+	margin-top:15px;
+	text-align:center;
+	line-height:25px;
 }

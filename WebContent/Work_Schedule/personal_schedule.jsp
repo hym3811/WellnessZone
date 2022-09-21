@@ -8,21 +8,33 @@
 <link rel="stylesheet" href="../style.css">
 <link rel="stylesheet" href="work_schedule.css">
 </head>
-<%@ include file="../DB.jsp" %>
-<%@ page import = "java.util.*" %>
 <body>
 <%@ include file="../header.jsp" %>
 <%@ include file="../nav.jsp" %>
+<%@ include file="../DB.jsp" %>
+<%@ page import = "java.util.*" %>
 <%@ page import = "java_class.Close" %>
 <section>
 	<form name="form" method="post">
+		<h3 class="title">개인 근무 설정</h3>
+		
 		<%
+
 			PreparedStatement pstmt = null;
 			ResultSet rs = null;
 			
+			String id = request.getParameter("id");
+			String name = request.getParameter("name");
+			%>
+			<script>
+			var a = "<%=id%>";
+			var b = "<%=name%>";
+			</script>
+			<%
+			String year = request.getParameter("year");
+			String month = request.getParameter("month");
+			
 			String today = null;
-			String year = null;
-			String month = null;
 			
 			//year,month 매개변수가 있으면 받는다.
 			if(request.getParameter("year")!=null){
@@ -73,22 +85,33 @@
 				e.printStackTrace();
 			}
 			
-			String[] id = new String[day.size()];
-			String[] name = new String[day.size()];
+			String[] work = new String[day.size()];
 			
 			try{
-				String sql = "select a.id,b.name,a.day,a.work from wellness_work a join wellness_account b on a.id=b.id where year=? and month=? order by a.day,b.name";
+				String sql = "select work from wellness_work where year=? and month = ? and id = ?";
 				pstmt = conn.prepareStatement(sql);
 				pstmt.setString(1, year);
 				pstmt.setString(2, month);
-				rs=pstmt.executeQuery();
+				pstmt.setString(3, id);
+				rs = pstmt.executeQuery();
 				
+				int i=0;
 				while(rs.next()){
-					int index = rs.getInt(3)-1;
-					if(rs.getInt(4)<1){
-						if(id[index]==null) id[index]=rs.getString(1); else id[index] += " "+rs.getString(1);
-						if(name[index]==null) name[index]=rs.getString(2); else name[index] += " "+rs.getString(2);
-					}
+					work[i] = rs.getString(1);
+					i++;
+				}
+			}catch(Exception e){
+				e.printStackTrace();
+			}
+			
+			String position = null;
+			try{
+				String sql = "select position from wellness_account where id=?";
+				pstmt = conn.prepareStatement(sql);
+				pstmt.setString(1, id);
+				rs = pstmt.executeQuery();
+				if(rs.next()){
+					position = rs.getString(1);
 				}
 			}catch(Exception e){
 				e.printStackTrace();
@@ -98,15 +121,15 @@
 		<input type="hidden" name="year" value="<%=year %>">
 		<input type="hidden" name="month" value="<%=month %>">
 		
-		<h3 class="title">근무표</h3>
-		
 		<div class="schedule_line" style="height:50px!important;margin:20px auto;">
-			<div class="schedule_btn" id="year_btn1" onclick="year(-1)">◀</div>
+			<div class="schedule_btn" id="year_btn1" onclick="personal_year(-1,a,b)">◀</div>
 			<div class="schedule_select" id="year_select" style="color:blue;font-weight:bold;"><%=year %></div>
-			<div class="schedule_btn" id="year_btn2" onclick="year(1)" style="margin-right:150px;">▶</div>
-			<div class="schedule_btn" id="month_btn1" onclick="month(-1)">▼</div>
+			<div class="schedule_btn" id="year_btn2" onclick="personal_year(1,a,b)" style="margin-right:150px;">▶</div>
+			<div class="schedule_btn" id="month_btn1" onclick="personal_month(-1,a,b)">▼</div>
 			<div class="schedule_select" id="month_select" style="color:purple;font-weight:bold;"><%=month %></div>
-			<div class="schedule_btn" id="month_btn2" onclick="month(1)">▲</div>
+			<div class="schedule_btn" id="month_btn2" onclick="personal_month(1,a,b)">▲</div>
+			<div><h3 style="font-size:2em;color:blue;margin-left:150px;"><%=name %></h3></div>
+			<div><h3 style="margin-left:20px;font-size:1.4em;line-height:55px;"><%=position %>님</h3></div>
 		</div>
 		
 		<div class="schedule_line" style="height:30px!important;">
@@ -168,26 +191,9 @@
 									%>
 									><%=day.get(idx) %></div>
 									<ul class="worker_ul">
-									<%
-										String[] id_split = null;
-										if(id[idx]!=null)id_split = id[idx].split(" ");
-										String[] name_split = null;
-										if(name[idx]!=null)name_split = name[idx].split(" ");
-										int length = 0;
-										if(id[idx]!=null)length = id_split.length;
-										
-										if(length<7){
-											for(int i=0;i<length;i++){
-												if(length>0){
-													%>
-													<li class="worker_list" onclick="location.href='personal_schedule.jsp?id=<%=id_split[i]%>&name=<%=name_split[i] %>&year=<%=year %>&month=<%=month%>&day=<%=day.get(idx)%>'"><%=name_split[i] %></li>
-													<%
-												}
-											}
-										}else{
-											%><li class="worker_list"><%=work_cnt.get(idx) %>명</li><%
-										}
-									%>
+										<li class="personal_list">근무<input type="radio" value="0" name="work_<%=idx %>" id="work_<%=idx%>" <%="0".equals(work[idx]) ? "checked" : "" %>></li>
+										<li class="personal_list" style="color:blue;">반차<input type="radio" value="0.5" name="work_<%=idx %>" id="work_<%=idx%>" <%="0.5".equals(work[idx]) ? "checked" : "" %>></li>
+										<li class="personal_list" style="color:red;">휴무<input type="radio" value="1" name="work_<%=idx %>" id="work_<%=idx%>" <%="1".equals(work[idx]) ? "checked" : "" %>></li>
 									</ul>
 								</div>
 								<%
@@ -227,6 +233,7 @@
 				}
 			}
 		%>
+		<div class="save_btn">저장</div>
 	</form>
 </section>
 <%@ include file="../footer.jsp" %>
@@ -234,6 +241,6 @@
 	Close.close(pstmt);
 	Close.close(rs);
 %>
-</body>
 <script src="work_schedule.js"></script>
+</body>
 </html>
