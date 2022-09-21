@@ -24,17 +24,16 @@
 		
 		while(true){
 			// i변수를 더한 날짜와 그 날짜의 요일을 받아옴
-			sql = "select trunc(to_date('"+start+"','yyyy-mm-dd'),'mm')+"+i+",to_char(trunc(to_date('"+start+"','yyyy-mm-dd'),'mm')+1,'d') from dual";
+			sql = "select trunc(to_date('"+start+"','yyyy-mm-dd'),'mm')+"+i+",to_char(trunc(to_date('"+start+"','yyyy-mm-dd'),'mm')+"+i+",'d') from dual";
 			pstmt = conn.prepareStatement(sql);
 			rs = pstmt.executeQuery();
 			
 			String temp = null; // i변수를 더한 날짜
 			int week = 0; // 요일 값을 받아올 변수
 			if(rs.next()){
-				System.out.println(rs.getString(1));
 				temp = rs.getString(1);
 				week = rs.getInt(2);
-
+				
 				if(temp.substring(5,7).equals(month)==false){ //월이 달라지면 break
 					break;
 				}else{

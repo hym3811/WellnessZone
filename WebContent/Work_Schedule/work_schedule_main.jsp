@@ -54,9 +54,10 @@
 			//조회 년월의 일,요일 리스트
 			ArrayList<Integer> day = new ArrayList<Integer>();
 			ArrayList<Integer> week = new ArrayList<Integer>();
+			ArrayList<Integer> work_cnt = new ArrayList<Integer>();
 			
 			try{//해당년도,해당월의 달력 정보 조회
-				String sql = "select distinct day,(week-1) from wellness_work where year=? and month=? order by day";
+				String sql = "select distinct day,(week-1),count(id) from wellness_work where year=? and month=? group by day,(week-1) order by day";
 				pstmt = conn.prepareStatement(sql);
 				pstmt.setString(1, year);
 				pstmt.setString(2, month);
@@ -65,6 +66,26 @@
 				while(rs.next()){
 					day.add(rs.getInt(1));
 					week.add(rs.getInt(2));
+					work_cnt.add(rs.getInt(3));
+				}
+			
+			}catch(Exception e){
+				e.printStackTrace();
+			}
+			
+			String[] id = new String[day.size()];
+			String[] name = new String[day.size()];
+			try{
+				String sql = "select a.id,b.name,a.day from wellness_work a join wellness_account b on a.id=b.id where year=? and month=? order by a.day,b.name";
+				pstmt = conn.prepareStatement(sql);
+				pstmt.setString(1, year);
+				pstmt.setString(2, month);
+				rs=pstmt.executeQuery();
+				
+				while(rs.next()){
+					int index = rs.getInt(3)-1;
+					if(id[index]==null) id[index]=rs.getString(1); else id[index] += " "+rs.getString(1);
+					if(name[index]==null) name[index]=rs.getString(2); else name[index] += " "+rs.getString(2);
 				}
 			}catch(Exception e){
 				e.printStackTrace();
@@ -141,6 +162,23 @@
 										}
 									%>
 									><%=day.get(idx) %></div>
+									<ul class="worker_ul">
+									<%
+										String[] id_split = id[idx].split(" ");
+										String[] name_split = name[idx].split(" ");
+										int length = id_split.length;
+										
+										if(length<7){
+											for(int i=0;i<length;i++){
+												%>
+												<li class="worker_list" onclick="location.href='personal_schedule.jsp?id='"><%=name_split[i] %></li>
+												<%
+											}
+										}else{
+											%><li class="worker_list"><%=work_cnt.get(idx) %>명</li><%
+										}
+									%>
+									</ul>
 								</div>
 								<%
 							}
