@@ -225,9 +225,9 @@
 									%>
 									><%=day.get(idx) %></div>
 									<ul class="worker_ul">
-										<li class="personal_list">근무<input type="radio" value="0" name="work_<%=idx %>" id="work_<%=idx%>" <%="0".equals(work[idx]) ? "checked" : "" %>></li>
-										<li class="personal_list" style="color:blue;">반차<input type="radio" value="0.5" name="work_<%=idx %>" id="work_<%=idx%>" <%="0.5".equals(work[idx]) ? "checked" : "" %>></li>
-										<li class="personal_list" style="color:red;">휴무<input type="radio" value="1" name="work_<%=idx %>" id="work_<%=idx%>" <%="1".equals(work[idx]) ? "checked" : "" %>></li>
+										<li class="personal_list" <%="0".equals(work[idx]) ? "style='background-color:orange;'" : "" %>>근무<input type="radio" value="0" name="work_<%=idx %>" id="work_<%=idx%>" <%="0".equals(work[idx]) ? "checked" : "" %>></li>
+										<li class="personal_list" <%="0.5".equals(work[idx]) ? "style='background-color:orange;color:blue;'" : "" %> style="color:blue;">반차<input type="radio" value="0.5" name="work_<%=idx %>" id="work_<%=idx%>" <%="0.5".equals(work[idx]) ? "checked" : "" %>></li>
+										<li class="personal_list" <%="1".equals(work[idx]) ? "style='background-color:orange;color:red;'" : "" %> style="color:red;">휴무<input type="radio" value="1" name="work_<%=idx %>" id="work_<%=idx%>" <%="1".equals(work[idx]) ? "checked" : "" %>></li>
 									</ul>
 								</div>
 								<%

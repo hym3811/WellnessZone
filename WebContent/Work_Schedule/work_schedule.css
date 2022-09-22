@@ -82,9 +82,10 @@
 	text-decoration:underline;
 }
 .personal_list{
+	margin-left:15px;
+	width:50px;
 	list-style:none;
 	text-align:left;
-	text-indent:15px;
 }
 .save_btn{
 	background-color:#393939;
