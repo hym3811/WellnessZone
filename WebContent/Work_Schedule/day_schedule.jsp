@@ -14,6 +14,7 @@
 <%@ include file="../DB.jsp" %>
 <%@ page import = "java_class.Close" %>
 <%@ page import = "java.util.*" %>
+<%@ page import = "java.text.*" %>
 <%
 	PreparedStatement pstmt = null;
 	ResultSet rs = null;
@@ -36,7 +37,7 @@
 	
 	String select_date = year + "-" + month + "-" + day;
 	
-	System.out.println(year + " / " + month + " / " + day);
+	System.out.println(select_date);
 	
 	int size = 0;
 	try{
@@ -98,7 +99,7 @@
 			<div class="schedule_btn" id="day_btn2" onclick="day_day(1)">▲</div>
 			<div style="position:absolute;right:150px;top:-5px;font-weight:bold;">달력에서 직접 선택</div>
 			<div style="position:absolute;right:150px;top:20px;">
-				<input type="date" name="choice_date" onchange="calendar_choice()">
+				<input type="date" name="choice_date" value="<%=request.getParameter("choice_date")==null ? "" : request.getParameter("choice_date") %>" onchange="calendar_choice()">
 			</div>
 		</div>
 		
