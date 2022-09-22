@@ -8,7 +8,8 @@
 </head>
 <body>
 	<nav>
-		<ul>
+	<div style="margin:0 auto;">
+			<ul>
 			<li>일정</li>
 			<li>스케줄 관리</li>
 			<li>출근관리</li>
@@ -16,6 +17,7 @@
 			<li>결산</li>
 			<li>관리자</li>
 		</ul>
+	</div>
 	</nav>
 </body>
 </html>

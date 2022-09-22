@@ -9,14 +9,16 @@
 	
 	String login_id = request.getParameter("id");
 	String pass = request.getParameter("pass");
+	String login_name = null;
 	try{
 		//계정 일치 확인
-		String sql = "select pass from wellness_account where id=?";
+		String sql = "select pass,name from wellness_account where id=?";
 		pstmt = conn.prepareStatement(sql);
 		pstmt.setString(1, login_id);
 		rs = pstmt.executeQuery();
 		if(rs.next()){
 			String pass_check = rs.getString(1);
+			login_name = rs.getString(2);
 			
 			//비밀번호 틀림
 			if(pass.equals(pass_check)==false){
@@ -29,8 +31,8 @@
 			//비밀번호 일치 => 로그인 성공
 			}else{
 				
-				session.setAttribute(login_id, "login_id");
-				
+				session.setAttribute("login_id",login_id);
+				session.setAttribute("login_name",login_name);
 				%>
 				<script>
 				alert("로그인 성공");
@@ -55,10 +57,11 @@
 					pstmt.setString(2, month);
 					rs = pstmt.executeQuery();
 					
-					//있으면 당월 테이블 생성되어있으므로 로그인 성공
+					//있으면 당일 정보 생성되어있으므로 로그인 성공
 					if(rs.next()){
 						Close.close(pstmt);
 						Close.close(rs);
+						session.setAttribute(login_id, "id");
 						%>
 						<script>
 						location.href="Timestamp/timestamp_main.jsp";
@@ -67,7 +70,6 @@
 						
 					//없으면 당월 테이블이 없으므로 당월 테이블 생성함
 					}else{
-						int i=0;	// 오늘 날짜의 일수에 더할 변수
 						ArrayList<String> account = new ArrayList<String>();	// 마스터 계정을 제외한 계정의 id 리스트
 						
 						sql = "select id from wellness_account where rank>1";
@@ -77,62 +79,64 @@
 							account.add(rs.getString(1));
 						}
 						
-						String start = year+"/"+month+"/1";
+						sql = "select sysdate,to_char(sysdate,'d') from dual";
+						pstmt = conn.prepareStatement(sql);
+						rs = pstmt.executeQuery();
 						
-						while(true){
-							// i변수를 더한 날짜와 그 날짜의 요일을 받아옴
-							sql = "select trunc(sysdate,'mm')+"+i+",to_char(trunc(sysdate,'MM')+"+i+",'d') from dual";
-							pstmt = conn.prepareStatement(sql);
-							rs = pstmt.executeQuery();
-							
-							String temp = null; // i변수를 더한 날짜
-							int week = 0; // 요일 값을 받아올 변수
-							if(rs.next()){
-								System.out.println(rs.getString(1));
-								temp = rs.getString(1);
-								week = rs.getInt(2);
+						String temp = null; // 날짜 변수
+						int week = 0; // 요일 값을 받아올 변수
+						
+						if(rs.next()){
+							System.out.println(rs.getString(1));
+							temp = rs.getString(1).substring(8,10);
+							week = rs.getInt(2);
 
-								if(temp.subSequence(5, 7).equals(month)==false){ //월이 달라지면 break
-									break;
-								}else{
-									
-									for(int j = 0; j < account.size(); j++){ //아이디의 개수만큼 반복
-										sql = "insert into wellness_work values(?,?,?,?,?,'','',?)";
-										pstmt = conn.prepareStatement(sql);
-										pstmt.setString(1, year);
-										pstmt.setString(2, month);
-										pstmt.setInt(3, 1+i);
-										pstmt.setInt(4, week);
-										pstmt.setString(5, account.get(j));
-										switch(week){
-										case 2:
-											pstmt.setString(6, "0");
-											break;
-										case 3:
-											pstmt.setString(6, "0");
-											break;
-										case 4:
-											pstmt.setString(6, "0");
-											break;
-										case 5:
-											pstmt.setString(6, "0");
-											break;
-										case 6:
-											pstmt.setString(6, "0");
-											break;
-										case 7:
-											pstmt.setString(6, "0");
-											break;
-										case 1:
-											pstmt.setString(6, "1");
-											break;
-										}
-										pstmt.executeUpdate();
+							for(int j = 0; j < account.size(); j++){ //아이디의 개수만큼 반복
+								
+								sql = "select id from wellness_work where year=? and month=? and day=? and id=?";
+								pstmt = conn.prepareStatement(sql);
+								pstmt.setString(1, year);
+								pstmt.setString(2, month);
+								pstmt.setString(3, temp);
+								pstmt.setString(4, account.get(j));
+								rs = pstmt.executeQuery();
+								
+								if(!rs.next()){ // 조회값이 없으면 근무표에 아이디 생성 요일에 따라 디폴트값 다름
+									sql = "insert into wellness_work values(?,?,?,?,?,'','',?)";
+									pstmt = conn.prepareStatement(sql);
+									pstmt.setString(1, year);
+									pstmt.setString(2, month);
+									pstmt.setString(3, temp);
+									pstmt.setInt(4, week);
+									pstmt.setString(5, account.get(j));
+									switch(week){
+									case 2:
+										pstmt.setString(6, "0");
+										break;
+									case 3:
+										pstmt.setString(6, "0");
+										break;
+									case 4:
+										pstmt.setString(6, "0");
+										break;
+									case 5:
+										pstmt.setString(6, "0");
+										break;
+									case 6:
+										pstmt.setString(6, "0");
+										break;
+									case 7:
+										pstmt.setString(6, "0");
+										break;
+									case 1:
+										pstmt.setString(6, "1");
+										break;
 									}
+									pstmt.executeUpdate();
 								}
 							}
-							i++;
 						}
+					
 						Close.close(pstmt);
 						Close.close(rs);
 						%>

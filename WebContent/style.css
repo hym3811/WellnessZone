@@ -24,8 +24,14 @@ nav ul li{
 	width:200px;
 	height:50px;
 	text-align:center;
-	border:1px solid white;
 	line-height:300%;
+	font-weight:bold;
+}
+nav ul li:hover{
+	background-color:black;
+	color:white;
+	transition:0.5s;
+	cursor:pointer;
 }
 section{
 	clear:both;
@@ -74,4 +80,17 @@ footer{
 	background-color:black;
 	transition:0.7s;
 	
+}
+.header_name{
+	position:absolute;
+	color:white;
+	right:100px;
+	top:10px;
+}
+.header_clock{
+	position:absolute;
+	color:white;
+	font-weight:bold;
+	right:50px;
+	top:50px;
 }

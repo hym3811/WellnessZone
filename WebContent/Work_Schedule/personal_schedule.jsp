@@ -66,19 +66,49 @@
 			//조회 년월의 일,요일 리스트
 			ArrayList<Integer> day = new ArrayList<Integer>();
 			ArrayList<Integer> week = new ArrayList<Integer>();
+			String start = year+"-"+month+"-01";
+			String week_list = null;
+			StringBuilder sb = new StringBuilder();
+			int i=0;
+			try{
+				while(true){
+					// i변수를 더한 날짜와 그 날짜의 요일을 받아옴
+					String sql = "select trunc(to_date('"+start+"','yyyy-mm-dd'),'mm')+"+i+",to_char(trunc(to_date('"+start+"','yyyy-mm-dd'),'mm')+"+i+",'d') from dual";
+					pstmt = conn.prepareStatement(sql);
+					rs = pstmt.executeQuery();
+					
+					String temp = null; // i변수를 더한 날짜
+					int temp_week = 0; // 요일 값을 받아올 변수
+
+					if(rs.next()){
+						temp = rs.getString(1);
+						temp_week = rs.getInt(2)-1;
+						sb.append(temp_week).append(" ");
+						
+						if(Integer.parseInt(temp.substring(5,7))!=Integer.parseInt(month)){ //월이 달라지면 break
+							break;
+						}else{
+							day.add(Integer.parseInt(temp.substring(8,10)));
+							week.add(temp_week);
+						}
+					}
+					i++;
+				}week_list = sb.toString();
+			}catch(Exception e){
+				e.printStackTrace();
+			}
+			
 			ArrayList<Integer> work_cnt = new ArrayList<Integer>();
 			
 			try{//해당년도,해당월의 달력 정보 조회
-				String sql = "select distinct day,(week-1),count(id) from wellness_work where year=? and month=? group by day,(week-1) order by day";
+				String sql = "select count(id),day from wellness_work where year=? and month=? group by day order by day";
 				pstmt = conn.prepareStatement(sql);
 				pstmt.setString(1, year);
 				pstmt.setString(2, month);
 				rs = pstmt.executeQuery();
 				
 				while(rs.next()){
-					day.add(rs.getInt(1));
-					week.add(rs.getInt(2));
-					work_cnt.add(rs.getInt(3));
+					work_cnt.add(rs.getInt(1));
 				}
 			
 			}catch(Exception e){
@@ -87,22 +117,23 @@
 			
 			String[] work = new String[day.size()];
 			
-			try{
-				String sql = "select work from wellness_work where year=? and month = ? and id = ?";
-				pstmt = conn.prepareStatement(sql);
-				pstmt.setString(1, year);
-				pstmt.setString(2, month);
-				pstmt.setString(3, id);
-				rs = pstmt.executeQuery();
-				
-				int i=0;
-				while(rs.next()){
-					work[i] = rs.getString(1);
-					i++;
+			for(int k=0;k<day.size();k++){
+				try{
+					String sql = "select work from wellness_work where year=? and month = ? and day=? and id = ?";
+					pstmt = conn.prepareStatement(sql);
+					pstmt.setString(1, year);
+					pstmt.setString(2, month);
+					pstmt.setInt(3, k+1);
+					pstmt.setString(4, id);
+					rs = pstmt.executeQuery();
+					
+					if(rs.next()){
+						work[k] = rs.getString(1);
+					}
+				}catch(Exception e){
+					e.printStackTrace();
 				}
-			}catch(Exception e){
-				e.printStackTrace();
-			}
+			}System.out.println(work);
 			
 			String position = null;
 			try{
@@ -120,6 +151,9 @@
 		<!-- 년/월 변경을 위한 히든변수 -->
 		<input type="hidden" name="year" value="<%=year %>">
 		<input type="hidden" name="month" value="<%=month %>">
+		<input type="hidden" name="id" value="<%=id %>">
+		<input type="hidden" name="name" value="<%=name %>">
+		<input type="hidden" name="week_list" value="<%=week_list %>">
 		
 		<div class="schedule_line" style="height:50px!important;margin:20px auto;">
 			<div class="schedule_btn" id="year_btn1" onclick="personal_year(-1,a,b)">◀</div>
@@ -135,7 +169,7 @@
 		<div class="schedule_line" style="height:30px!important;">
 		<%
 			String[] week_arr = {"일","월","화","수","목","금","토"};
-			for(int i=0;i<7;i++){
+			for(int h=0;h<7;h++){
 				%>
 				<div class="schedule_week"
 				<%
@@ -151,11 +185,11 @@
 							break;
 					}
 				%>
-				><%=week_arr[i] %></div>
+				><%=week_arr[h] %></div>
 				<%
 			}
 		%>
-		</div>
+		</div><input type="hidden" name="size" value="<%=day.size()%>">
 		<%
 			if(day.size()>0){
 				int week_start = week.get(0); //시작 요일
@@ -233,7 +267,7 @@
 				}
 			}
 		%>
-		<div class="save_btn">저장</div>
+		<div class="save_btn" onclick="personal_schedule()">저장</div>
 	</form>
 </section>
 <%@ include file="../footer.jsp" %>
@@ -242,5 +276,11 @@
 	Close.close(rs);
 %>
 <script src="work_schedule.js"></script>
+<script>
+function personal_schedule(){
+	document.form.action = "personal_schedule_save_Process.jsp";
+	document.form.submit();
+}
+</script>
 </body>
 </html>

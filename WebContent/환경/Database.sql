@@ -6,6 +6,7 @@ name	/	varchar2(12)	/	not null
 rank	/	number(1)			/	not null
 position/	varchar2(20)
 			=> 1: 마스터 계정 / 2: 관리자 / 3: 직원
+joindate/	date			/	not null
 out		/	number(1)
 			=> 0: 퇴사 / 1: 재직
 

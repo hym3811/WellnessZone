@@ -54,42 +54,72 @@
 			//조회 년월의 일,요일 리스트
 			ArrayList<Integer> day = new ArrayList<Integer>();
 			ArrayList<Integer> week = new ArrayList<Integer>();
+			String start = year+"-"+month+"-01";
+			int i=0;
+			try{
+				while(true){
+					// i변수를 더한 날짜와 그 날짜의 요일을 받아옴
+					String sql = "select trunc(to_date('"+start+"','yyyy-mm-dd'),'mm')+"+i+",to_char(trunc(to_date('"+start+"','yyyy-mm-dd'),'mm')+"+i+",'d') from dual";
+					pstmt = conn.prepareStatement(sql);
+					rs = pstmt.executeQuery();
+					
+					String temp = null; // i변수를 더한 날짜
+					int temp_week = 0; // 요일 값을 받아올 변수
+
+					if(rs.next()){
+						temp = rs.getString(1);
+						temp_week = rs.getInt(2)-1;
+						
+						if(Integer.parseInt(temp.substring(5,7))!=Integer.parseInt(month)){ //월이 달라지면 break
+							break;
+						}else{
+							day.add(Integer.parseInt(temp.substring(8,10)));
+							week.add(temp_week);
+						}
+					}
+					i++;
+				}
+			}catch(Exception e){
+				e.printStackTrace();
+			}
+			
 			ArrayList<Integer> work_cnt = new ArrayList<Integer>();
 			
+			
 			try{//해당년도,해당월의 달력 정보 조회
-				String sql = "select distinct day,(week-1),count(id) from wellness_work where year=? and month=? group by day,(week-1) order by day";
+				String sql = "select distinct day,count(id) from wellness_work where year=? and month=? and work<1 group by day order by day";
 				pstmt = conn.prepareStatement(sql);
 				pstmt.setString(1, year);
 				pstmt.setString(2, month);
 				rs = pstmt.executeQuery();
 				
 				while(rs.next()){
-					day.add(rs.getInt(1));
-					week.add(rs.getInt(2));
-					work_cnt.add(rs.getInt(3));
+					work_cnt.add(rs.getInt(2));
 				}
 			
 			}catch(Exception e){
 				e.printStackTrace();
 			}
-			
+
 			String[] id = new String[day.size()];
 			String[] name = new String[day.size()];
+			float[] work = new float[day.size()];
 			
 			try{
-				String sql = "select a.id,b.name,a.day,a.work from wellness_work a join wellness_account b on a.id=b.id where year=? and month=? order by a.day,b.name";
-				pstmt = conn.prepareStatement(sql);
-				pstmt.setString(1, year);
-				pstmt.setString(2, month);
-				rs=pstmt.executeQuery();
-				
-				while(rs.next()){
-					int index = rs.getInt(3)-1;
-					if(rs.getInt(4)<1){
-						if(id[index]==null) id[index]=rs.getString(1); else id[index] += " "+rs.getString(1);
-						if(name[index]==null) name[index]=rs.getString(2); else name[index] += " "+rs.getString(2);
+				for(int z=0;z<day.size();z++){
+					String sql = "select a.id,b.name,a.day,a.work from wellness_work a join wellness_account b on a.id=b.id where year=? and month=? and day=? order by a.day,b.name";
+					pstmt = conn.prepareStatement(sql);
+					pstmt.setString(1, year);
+					pstmt.setString(2, month);
+					pstmt.setInt(3, z+1);
+					rs=pstmt.executeQuery();
+					
+					while(rs.next()){
+						if(id[z]==null) id[z]=rs.getString(1); else id[z] = id[z] + " "+rs.getString(1);
+						if(name[z]==null) name[z]=rs.getString(2); else name[z] = name[z] + " "+rs.getString(2);
+						work[z] = rs.getFloat(4);
 					}
-				}
+				}System.out.println(Arrays.toString(name));
 			}catch(Exception e){
 				e.printStackTrace();
 			}
@@ -112,7 +142,7 @@
 		<div class="schedule_line" style="height:30px!important;">
 		<%
 			String[] week_arr = {"일","월","화","수","목","금","토"};
-			for(int i=0;i<7;i++){
+			for(int j=0;j<7;j++){
 				%>
 				<div class="schedule_week"
 				<%
@@ -128,7 +158,7 @@
 							break;
 					}
 				%>
-				><%=week_arr[i] %></div>
+				><%=week_arr[j] %></div>
 				<%
 			}
 		%>
@@ -149,14 +179,16 @@
 						<%
 						
 						while(true){
-							if(cnt==week_start){
-								check[0] = true;
+							if(check[0]==false){
+								if(cnt==week_start){
+										check[0] = true;
+								}
 							}
 							
 							if(check[0]&&!check[1]){
 								%>
 								<div class="schedule_box">
-									<div class="schedule_day" id="day_<%=day.get(idx) %>"
+									<div class="schedule_day" id="day_<%=day.get(idx) %>" onclick="location.href='day_schedule.jsp?year=<%=year %>&month=<%=month %>&day=<%=day.get(idx) %>'"
 									<%
 										if(week.get(idx)==0){
 											%>style="background-color:red;"<%
@@ -177,15 +209,19 @@
 										if(id[idx]!=null)length = id_split.length;
 										
 										if(length<7){
-											for(int i=0;i<length;i++){
+											for(int h=0;h<length;h++){
 												if(length>0){
+													if(work[idx]<1){
 													%>
-													<li class="worker_list" onclick="location.href='personal_schedule.jsp?id=<%=id_split[i]%>&name=<%=name_split[i] %>&year=<%=year %>&month=<%=month%>&day=<%=day.get(idx)%>'"><%=name_split[i] %></li>
+													<li class="worker_list" onclick="location.href='personal_schedule.jsp?id=<%=id_split[h]%>&name=<%=name_split[h] %>&year=<%=year %>&month=<%=month%>&day=<%=day.get(idx)%>'"><%=name_split[h] %></li>
 													<%
+													}
 												}
 											}
 										}else{
-											%><li class="worker_list"><%=work_cnt.get(idx) %>명</li><%
+											%>
+											<li class="worker_list"><%=work_cnt.get(idx) %>명</li>
+											<%
 										}
 									%>
 									</ul>
