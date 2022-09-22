@@ -103,7 +103,7 @@
 
 			String[] id = new String[day.size()];
 			String[] name = new String[day.size()];
-			float[] work = new float[day.size()];
+			String[] work = new String[day.size()];
 			
 			try{
 				for(int z=0;z<day.size();z++){
@@ -117,9 +117,9 @@
 					while(rs.next()){
 						if(id[z]==null) id[z]=rs.getString(1); else id[z] = id[z] + " "+rs.getString(1);
 						if(name[z]==null) name[z]=rs.getString(2); else name[z] = name[z] + " "+rs.getString(2);
-						work[z] = rs.getFloat(4);
+						if(work[z]==null) work[z]=rs.getString(4); else work[z] = work[z] + " "+rs.getString(4);
 					}
-				}System.out.println(Arrays.toString(name));
+				}
 			}catch(Exception e){
 				e.printStackTrace();
 			}
@@ -130,13 +130,23 @@
 		
 		<h3 class="title">근무표</h3>
 		
-		<div class="schedule_line" style="height:50px!important;margin:20px auto;">
+		<div class="schedule_line" style="position:relative;height:50px!important;margin:20px auto;">
 			<div class="schedule_btn" id="year_btn1" onclick="year(-1)">◀</div>
 			<div class="schedule_select" id="year_select" style="color:blue;font-weight:bold;"><%=year %></div>
 			<div class="schedule_btn" id="year_btn2" onclick="year(1)" style="margin-right:150px;">▶</div>
 			<div class="schedule_btn" id="month_btn1" onclick="month(-1)">▼</div>
 			<div class="schedule_select" id="month_select" style="color:purple;font-weight:bold;"><%=month %></div>
 			<div class="schedule_btn" id="month_btn2" onclick="month(1)">▲</div>
+			<div style="position:absolute;right:220px;top:-5px;font-weight:bold;">개인 근무표 설정</div>
+			<div style="position:absolute;right:20px;top:20px;">
+				<select name="search_option">
+					<option value="">검색 조건 선택
+					<option value="name">이름
+					<option value="id">아이디
+				</select>
+				<input type="text" name="search_input">
+				<input type="button" value="이동" onclick="search_move()">
+			</div>
 		</div>
 		
 		<div class="schedule_line" style="height:30px!important;">
@@ -206,12 +216,14 @@
 										String[] name_split = null;
 										if(name[idx]!=null)name_split = name[idx].split(" ");
 										int length = 0;
+										String[] work_split = null;
+										if(work[idx]!=null)work_split = work[idx].split(" ");
 										if(id[idx]!=null)length = id_split.length;
 										
 										if(length<7){
 											for(int h=0;h<length;h++){
 												if(length>0){
-													if(work[idx]<1){
+													if(Float.parseFloat(work_split[h])<1){
 													%>
 													<li class="worker_list" onclick="location.href='personal_schedule.jsp?id=<%=id_split[h]%>&name=<%=name_split[h] %>&year=<%=year %>&month=<%=month%>&day=<%=day.get(idx)%>'"><%=name_split[h] %></li>
 													<%
@@ -272,4 +284,22 @@
 %>
 </body>
 <script src="work_schedule.js"></script>
+<script>
+	function search_move(){
+		
+		if(document.form.search_option.value==""){
+			alert("검색조건 설정을 하세요.");
+			document.form.search_option.focus();
+			return false;
+		}
+		if(document.form.search_input.value==""){
+			alert("검색내용을 입력하세요.");
+			document.form.search_input.focus();
+			return false;
+		}
+		
+		document.form.action = "personal_search_process.jsp";
+		document.form.submit();
+	}
+</script>
 </html>

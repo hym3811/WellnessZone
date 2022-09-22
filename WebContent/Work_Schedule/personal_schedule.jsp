@@ -133,7 +133,7 @@
 				}catch(Exception e){
 					e.printStackTrace();
 				}
-			}System.out.println(work);
+			}
 			
 			String position = null;
 			try{

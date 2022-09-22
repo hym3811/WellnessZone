@@ -15,12 +15,9 @@
 	String[] week = request.getParameter("week_list").split(" ");
 	String[] work = new String[size];
 	
-	System.out.println(year + " / " + month + " / " + id);
-	System.out.println(Arrays.toString(week));
-	
 	for(int i=0;i<size;i++){
 		work[i] = request.getParameter("work_"+i);
-	}System.out.println(Arrays.toString(work));
+	}
 	
 	try{
 		for(int i=0;i<size;i++){
@@ -63,7 +60,7 @@
 		%>
 		<script>
 		alert("저장이 완료되었습니다.");
-		location.href="work_schedule_main.jsp";
+		location.href="work_schedule_main.jsp?year=<%=year%>&month=<%=month%>";
 		</script>
 		<%
 	}catch(Exception e){

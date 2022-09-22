@@ -103,3 +103,72 @@ $("#month_btn1").mouseout(function(){
 $("#month_btn2").mouseout(function(){
 	month_btn2();
 });
+
+function day_year(i){
+	var doc = document.form;
+	
+	var year = parseInt(doc.year.value)+i;
+	var month = doc.month.value;
+	var day = doc.day.value;
+	
+	if(year<0){
+		alert('년도는 0보다 작을수 없습니다.');
+		return false;
+	}
+	
+	location.href="day_schedule.jsp?year="+year+"&month="+month+"&day="+day;
+}
+function day_month(i){
+	var doc = document.form;
+	
+	var year = doc.year.value;
+	var month = parseInt(doc.month.value)+i;
+	var day = doc.day.value;
+	
+	if(month<1||month>12){
+		alert('월은 1월~12월 범위내에서 조회해주세요.');
+		return false;
+	}
+	
+	location.href="day_schedule.jsp?year="+year+"&month="+month+"&day="+day;
+}
+function day_day(i){
+	var doc = document.form;
+	
+	var year = doc.year.value;
+	var month = doc.month.value;
+	var day = parseInt(doc.day.value)+i;
+	
+	if(day<1||day>size){
+		alert('일은 1일~'+size+'일 범위내에서 조회해주세요.');
+		return false;
+	}
+	
+	location.href="day_schedule.jsp?year="+year+"&month="+month+"&day="+day;
+}
+
+function day_btn(){
+	$('#day_select').css({
+		"text-shadow": "2px 2px 0px gray",
+		"transition":"0.3s"
+	});
+}
+function day_btn2(){
+	$('#day_select').css({
+		"text-shadow": "none",
+		"transition":"0.3s"
+	});
+}
+
+$("#day_btn1").mouseover(function(){
+	day_btn();
+});
+$("#day_btn2").mouseover(function(){
+	day_btn();
+});
+$("#day_btn1").mouseout(function(){
+	day_btn2();
+});
+$("#day_btn2").mouseout(function(){
+	day_btn2();
+});
