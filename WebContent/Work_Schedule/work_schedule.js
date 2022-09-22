@@ -172,3 +172,15 @@ $("#day_btn1").mouseout(function(){
 $("#day_btn2").mouseout(function(){
 	day_btn2();
 });
+
+$("#year_select").click(function(){
+	$("#year_select").css({
+		"display":"none"
+	})
+})
+$("#month_select").click(function(){
+	$("#month_select").css({
+		"display":"none"
+	})
+	
+})

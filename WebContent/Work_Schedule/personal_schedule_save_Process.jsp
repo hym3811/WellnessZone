@@ -32,17 +32,17 @@
 				rs = pstmt.executeQuery();
 				
 				if(!rs.next()){
-				
-					sql = "insert into wellness_work values(?,?,?,?,?,'','',?)";
+					pstmt.close();
+					sql = "insert into wellness_work values(?,?,?,?,'','',?)";
 					pstmt = conn.prepareStatement(sql);
 					pstmt.setString(1, year);
 					pstmt.setString(2, month);
 					pstmt.setInt(3, i+1);
-					pstmt.setString(4, week[i]);
-					pstmt.setString(5, id);
-					pstmt.setString(6, work[i]);
+					pstmt.setString(4, id);
+					pstmt.setString(5, work[i]);
 					pstmt.executeUpdate();
 				}else{
+					pstmt.close();
 					sql = "update wellness_work set work = ? where year=? and month=? and day=? and id=?";
 					pstmt = conn.prepareStatement(sql);
 					
@@ -59,7 +59,6 @@
 		Close.close(rs);
 		%>
 		<script>
-		alert("저장이 완료되었습니다.");
 		location.href="work_schedule_main.jsp?year=<%=year%>&month=<%=month%>";
 		</script>
 		<%

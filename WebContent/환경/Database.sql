@@ -4,8 +4,8 @@ id	    /	varchar2(12)	/	primary key
 pass	/	varchar2(12)	/	not null
 name	/	varchar2(12)	/	not null
 rank	/	number(1)			/	not null
-position/	varchar2(20)
 			=> 1: 마스터 계정 / 2: 관리자 / 3: 직원
+position/	varchar2(20)
 joindate/	date			/	not null
 outdate	/	date
 
@@ -19,7 +19,7 @@ create table wellness_account(
 	position varchar2(20),
 	out number(1));
 
-insert into wellness_account values('manager','master5580','마스터',1,'마스터계정');
+insert into wellness_account values('master','master5580','마스터',1,'마스터계정');
 
 commit;
 
@@ -44,12 +44,11 @@ create table wellness_work(
 	year number(4),
 	month number(2),
 	day number(2),
-	week number(1),
 	id varchar2(12),
 	enter timestamp,
 	exit timestamp,
 	work varchar2(3) not null,
-	primary key(year,month,day,week,id));
+	primary key(year,month,day,id));
 
 commit;
 

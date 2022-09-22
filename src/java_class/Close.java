@@ -1,5 +1,7 @@
 package java_class;
 import java.sql.*;
+import java.util.Calendar;
+import java.util.Date;
 
 public class Close {
 	public static void close(PreparedStatement pstmt) {
@@ -19,5 +21,10 @@ public class Close {
 				e.printStackTrace();
 			}
 		}
+	}
+	public static Date getDate(int year, int month, int date){
+        Calendar cal = Calendar.getInstance();
+        cal.set(year, month-1, date);
+        return new Date(cal.getTimeInMillis());
 	}
 }

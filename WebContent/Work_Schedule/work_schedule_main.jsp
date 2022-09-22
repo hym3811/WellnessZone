@@ -30,7 +30,7 @@
 			}
 			
 			if(request.getParameter("month")!=null){
-				month = request.getParameter("month");
+				month = Integer.toString(Integer.parseInt(request.getParameter("month")));
 			}
 			
 			//year,month 매개변수가 없으면 오늘 날짜기준 당월 조회
@@ -43,7 +43,7 @@
 						today = rs.getString(1).substring(0,10);
 						
 						if(year==null)	year = today.substring(0,4);
-						if(month==null)	month = today.substring(5,7);
+						if(month==null)	month = Integer.toString(Integer.parseInt(today.substring(5,7)));
 						
 					}
 				}catch(Exception e){
@@ -78,6 +78,24 @@
 						}
 					}
 					i++;
+				}
+			}catch(Exception e){
+				e.printStackTrace();
+			}
+			//조회 년,월에 근무 가능한 이름 목록
+			String last = year+"-"+month+"-"+Integer.toString(day.size());
+			
+			ArrayList<String> select_name = new ArrayList<String>();
+			ArrayList<String> select_position = new ArrayList<String>();
+			try{
+				String sql = "select name,position from wellness_account where rank>=3 and joindate<=? and outdate>? order by joindate";
+				pstmt = conn.prepareStatement(sql);
+				pstmt.setString(1, start);
+				pstmt.setString(2, last);
+				rs = pstmt.executeQuery();
+				while(rs.next()){
+					select_name.add(rs.getString(1));
+					select_position.add(rs.getString(2));
 				}
 			}catch(Exception e){
 				e.printStackTrace();
@@ -139,12 +157,32 @@
 			<div class="schedule_btn" id="month_btn2" onclick="month(1)">▲</div>
 			<div style="position:absolute;right:220px;top:-5px;font-weight:bold;">개인 근무표 설정</div>
 			<div style="position:absolute;right:20px;top:20px;">
-				<select name="search_option">
+				<select name="search_option" onchange="searchOption()">
 					<option value="">검색 조건 선택
-					<option value="name">이름
-					<option value="id">아이디
+					<option value="name" <%="name".equals(request.getParameter("search_option")) ? "selected" : "" %>>이름
+					<option value="id" <%="id".equals(request.getParameter("search_option")) ? "selected" : "" %>>아이디
+					<option value="choice" <%="choice".equals(request.getParameter("search_option")) ? "selected" : "" %>>직접 선택
 				</select>
-				<input type="text" name="search_input">
+				<%
+					if("choice".equals(request.getParameter("search_option"))){
+						%>
+						<select name="search_input" style="width:173px;">
+							<option value="">직원 선택
+							<%
+								for(int p=0;p<select_name.size();p++){
+									%>
+									<option value="<%=select_name.get(p)%>"><%=select_name.get(p)%> <%=select_position.get(p) %>
+									<%	
+								}
+							%>
+						</select>
+						<%
+					}else{
+						%>
+						<input type="text" name="search_input">
+						<%
+					}
+				%>
 				<input type="button" value="이동" onclick="search_move()">
 			</div>
 		</div>
@@ -299,6 +337,10 @@
 		}
 		
 		document.form.action = "personal_search_process.jsp";
+		document.form.submit();
+	}
+	function searchOption(){
+		document.form.action = "work_schedule_main.jsp";
 		document.form.submit();
 	}
 </script>

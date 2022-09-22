@@ -102,34 +102,33 @@
 								rs = pstmt.executeQuery();
 								
 								if(!rs.next()){ // 조회값이 없으면 근무표에 아이디 생성 요일에 따라 디폴트값 다름
-									sql = "insert into wellness_work values(?,?,?,?,?,'','',?)";
+									sql = "insert into wellness_work values(?,?,?,?,'','',?)";
 									pstmt = conn.prepareStatement(sql);
 									pstmt.setString(1, year);
 									pstmt.setString(2, month);
 									pstmt.setString(3, temp);
-									pstmt.setInt(4, week);
-									pstmt.setString(5, account.get(j));
+									pstmt.setString(4, account.get(j));
 									switch(week){
 									case 2:
-										pstmt.setString(6, "0");
+										pstmt.setString(5, "0");
 										break;
 									case 3:
-										pstmt.setString(6, "0");
+										pstmt.setString(5, "0");
 										break;
 									case 4:
-										pstmt.setString(6, "0");
+										pstmt.setString(5, "0");
 										break;
 									case 5:
-										pstmt.setString(6, "0");
+										pstmt.setString(5, "0");
 										break;
 									case 6:
-										pstmt.setString(6, "0");
+										pstmt.setString(5, "0");
 										break;
 									case 7:
-										pstmt.setString(6, "0");
+										pstmt.setString(5, "0");
 										break;
 									case 1:
-										pstmt.setString(6, "1");
+										pstmt.setString(5, "1");
 										break;
 									}
 									pstmt.executeUpdate();

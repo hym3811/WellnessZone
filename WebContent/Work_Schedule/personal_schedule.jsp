@@ -164,6 +164,7 @@
 			<div class="schedule_btn" id="month_btn2" onclick="personal_month(1,a,b)">▲</div>
 			<div><h3 style="font-size:2em;color:blue;margin-left:150px;"><%=name %></h3></div>
 			<div><h3 style="margin-left:20px;font-size:1.4em;line-height:55px;"><%=position %>님</h3></div>
+			<div style="margin-left:140px!important;" class="save_btn" onclick="personal_reset()">초기화</div>
 		</div>
 		
 		<div class="schedule_line" style="height:30px!important;">
@@ -213,7 +214,7 @@
 							if(check[0]&&!check[1]){
 								%>
 								<div class="schedule_box">
-									<div class="schedule_day" id="day_<%=day.get(idx) %>"
+									<div class="schedule_day" id="day_<%=day.get(idx) %>" onclick="location.href='day_schedule.jsp?year=<%=year %>&month=<%=month %>&day=<%=day.get(idx) %>'"
 									<%
 										if(week.get(idx)==0){
 											%>style="background-color:red;"<%
@@ -279,6 +280,10 @@
 <script>
 function personal_schedule(){
 	document.form.action = "personal_schedule_save_Process.jsp";
+	document.form.submit();
+}
+function personal_reset(){
+	document.form.action = "personal_schedule.jsp";
 	document.form.submit();
 }
 </script>
