@@ -125,7 +125,7 @@
 			
 			try{
 				for(int z=0;z<day.size();z++){
-					String sql = "select a.id,b.name,a.day,a.work from wellness_work a join wellness_account b on a.id=b.id where year=? and month=? and day=? order by a.day,b.name";
+					String sql = "select a.id,b.name,a.day,a.work from wellness_work a join wellness_account b on a.id=b.id where year=? and month=? and day=? and b.rank>=3 order by a.day,b.name";
 					pstmt = conn.prepareStatement(sql);
 					pstmt.setString(1, year);
 					pstmt.setString(2, month);

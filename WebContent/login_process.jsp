@@ -72,7 +72,7 @@
 					}else{
 						ArrayList<String> account = new ArrayList<String>();	// 마스터 계정을 제외한 계정의 id 리스트
 						
-						sql = "select id from wellness_account where rank>1";
+						sql = "select id from wellness_account where rank>=3";
 						pstmt = conn.prepareStatement(sql);
 						rs=pstmt.executeQuery();
 						while(rs.next()){
