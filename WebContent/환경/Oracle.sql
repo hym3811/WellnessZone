@@ -24,8 +24,8 @@ create table wellness_work(
 	day number(2),
 	id varchar2(12),
 	team varchar2(30),
-	enter timestamp,
-	exit timestamp,
+	enter varchar2(10),
+	exit varchar2(10),
 	work varchar2(3) not null,
 	primary key(year,month,day,id));
 

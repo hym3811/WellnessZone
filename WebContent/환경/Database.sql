@@ -32,8 +32,8 @@ month	/	number(2)		/	primary key
 day		/	number(2)		/	primary key
 id		/	varchar2(12)	/	primary key
 team	/	varchar2(30)
-enter	/	timestamp
-exit	/	timestamp
+enter	/	varchar2(10)
+exit	/	varchar2(10)
 work	/	varchar2(3)		/	not null
 			=> 0: 근무 / 0.5: 반차 / 1: 휴무
 

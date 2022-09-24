@@ -146,11 +146,11 @@
 												<input type="button" value="출근" onclick="if(document.form.enter_<%=id[i] %>.value!=<%=pass[i] %>){alert('비밀번호 확인');document.form.enter_<%=id[i] %>.focus();return false;}else{location.href='attendance_save_Process.jsp?ctg=enter&id=<%=id[i]%>&year=<%=year%>&month=<%=month%>&day=<%=day%>'}">
 											<%
 										}else{
-											%><div><div style="float:left;margin-left:20px;"><%=team[i]==0 ? "없음" : team_name.get(team[i]-1) %></div><div style="float:left;margin-left:20px;background-color:black;color:white;font-weight:bold;"><%=enter[i].substring(11,16)%> 출근</div><div style="float:left;">&nbsp;&nbsp;&nbsp;</div><%
+											%><div><div style="float:left;margin-left:20px;width:40px;font-weight:bold;"><%=team[i]==0 ? "없음" : team_name.get(team[i]-1)+"조" %></div><div style="float:left;margin-left:20px;background-color:black;color:white;font-weight:bold;"><%=enter[i]%> 출근</div><div style="float:left;">&nbsp;&nbsp;&nbsp;</div><%
 												if(team[i]!=0){
 
-													int hour = Integer.parseInt(enter[i].substring(11,13));
-													int minute = Integer.parseInt(enter[i].substring(14,16));
+													int hour = Integer.parseInt(enter[i].substring(0,2));
+													int minute = Integer.parseInt(enter[i].substring(3));
 													int enter_hour = Integer.parseInt(enter_time.get(team[i]-1).substring(0,2));
 													int enter_minute = Integer.parseInt(enter_time.get(team[i]-1).substring(3));
 													
@@ -158,11 +158,13 @@
 													if(hour-enter_hour==0){
 														int diff = minute-enter_minute;
 														if(diff>0){
-															if(diff<=3){
-																%><div class="enter_info" id="info_orange"> 0시간 <%=diff %>분<%
-															}else if(diff>3){
-																%><div class="enter_info" id="info_red"> 0시간 <%=diff %>분<%
-															}%> 지각</div><%
+															if(diff>=5){
+																%><div class="enter_info" id="info_red"> 00시간 <%=diff<10 ? "0"+Integer.toString(diff) : diff %>분 지각</div><%
+															}else if(diff<5&&diff>1){
+																%><div class="enter_info" id="info_orange"> 00시간 <%=diff<10 ? "0"+Integer.toString(diff) : diff %>분 지각</div><%
+															}
+														}else{
+															%><div class="enter_info" id="info_green">정상출근</div><%
 														}
 													}else if(hour-enter_hour>0){
 														int temp = (hour-enter_hour)*60;
@@ -171,13 +173,13 @@
 														}else if(minute-enter_minute<0){
 															temp = temp - 60 + minute + enter_minute;
 														}
-														if(temp<=3){
-															%><div class="enter_info" id="info_orange"><%=temp/60 %>시간 <%=temp%60 %>분<%
-														}else if(temp>3){
-															%><div class="enter_info" id="info_red"><%=temp/60 %>시간 <%=temp%60 %>분<%
-														}%> 지각</div><%
+														if(temp<=5&&temp>1){
+															%><div class="enter_info" id="info_orange"><%=temp/60 %>시간 <%=temp%60 %>분 지각</div><%
+														}else if(temp>5){
+															%><div class="enter_info" id="info_red"><%=temp/60<10 ? "0"+Integer.toString(temp/60) : temp/60 %>시간 <%=temp%60<10 ? "0"+Integer.toString(temp/60) : temp%60 %>분 지각</div><%
+														}
 													}else{
-														%><div class="enter_info" id="info_green">정상출근♡</div><%
+														%><div class="enter_info" id="info_green">정상출근</div><%
 													}
 												}
 										}
