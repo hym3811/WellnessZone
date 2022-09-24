@@ -100,11 +100,13 @@
 	}//System.out.println(Arrays.toString(id));System.out.println(Arrays.toString(name));System.out.println(Arrays.toString(position));
 	
 	String[] work = null;
+	String[] team = null;
 	try{
 		StringBuilder work_sb = new StringBuilder();
+		StringBuilder team_sb = new StringBuilder();
 		
 		for(int j=0;j<i;j++){
-			String sql = "select work from wellness_work where year=? and month=? and day=? and id=?";
+			String sql = "select team,work from wellness_work where year=? and month=? and day=? and id=?";
 			pstmt = conn.prepareStatement(sql);
 			pstmt.setString(1, year);
 			pstmt.setString(2, month);
@@ -113,15 +115,37 @@
 			rs = pstmt.executeQuery();
 			
 			if(rs.next()){
-				work_sb.append(rs.getString(1)).append(" ");
+				team_sb.append(rs.getString(1)).append(" ");
+				work_sb.append(rs.getString(2)).append(" ");
 			}else{
 				work_sb.append("-").append(" ");
+				team_sb.append("-").append(" ");
 			}
 		}
 		work = work_sb.toString().split(" ");
+		team = team_sb.toString().split(" ");
 	}catch(Exception e){
 		e.printStackTrace();
 	}//System.out.println(Arrays.toString(work));
+	
+	ArrayList<String> team_list = new ArrayList<String>();
+	ArrayList<String> team_name = new ArrayList<String>();
+	ArrayList<String> enter_time = new ArrayList<String>();
+	ArrayList<String> exit_time = new ArrayList<String>();
+	
+	try{
+		String sql = "select team,team_name,enter_time,exit_time from wellness_team";
+		pstmt = conn.prepareStatement(sql);
+		rs = pstmt.executeQuery();
+		while(rs.next()){
+			team_list.add(rs.getString(1));
+			team_name.add(rs.getString(2));
+			enter_time.add(rs.getString(3));
+			exit_time.add(rs.getString(4));
+		}
+	}catch(Exception e){
+		e.printStackTrace();
+	}
 %>
 <script>var size = <%=size%>;</script>
 <section>
@@ -131,10 +155,11 @@
 	<input type="hidden" name="day" value="<%=day %>">
 	<input type="hidden" name="week" value="<%=week %>">
 	<input type="hidden" name="id_list" value="<%=id_sb.toString()%>">
+	<input type="hidden" name="day_id_size" value="<%=team.length %>">
 		<h3 class="title">일별 근무 설정</h3>
 		
 		<div class="schedule_line" style="position:relative;height:50px!important;margin:20px auto;">
-			<div class="schedule_btn" id="year_btn1" onclick="day_year(-1)">◀</div>
+			<div class="schedule_btn" id="year_btn1" onclick="day_year(-1)" style="margin-left:200px;">◀</div>
 			<div class="schedule_select" id="year_select" style="color:blue;font-weight:bold;"><%=year %></div>
 			<div class="schedule_btn" id="year_btn2" onclick="day_year(1)" style="margin-right:70px;">▶</div>
 			<div class="schedule_btn" id="month_btn1" onclick="day_month(-1)">▼</div>
@@ -143,11 +168,11 @@
 			<div class="schedule_btn" id="day_btn1" onclick="day_day(-1)">▼</div>
 			<div class="schedule_select" id="day_select" style="color:purple;font-weight:bold;"><%=day %></div>
 			<div class="schedule_btn" id="day_btn2" onclick="day_day(1)">▲</div>
-			<div style="position:absolute;right:150px;top:-5px;font-weight:bold;">달력에서 직접 선택</div>
-			<div style="position:absolute;right:150px;top:20px;">
+			<div style="position:absolute;right:350px;font-weight:bold;">달력에서 직접 선택</div>
+			<div style="position:absolute;right:350px;top:25px;">
 				<input type="date" id="date_calender" name="choice_date" value="<%=request.getParameter("choice_date")==null ? callendar_date : request.getParameter("choice_date") %>" onchange="calendar_choice()">
 			</div>
-			<div style="margin-left:335px!important;" class="save_btn" onclick="calendar_choice()">초기화</div>
+			<div style="position:absolute;right:180px;" class="save_btn" onclick="calendar_choice()">초기화</div>
 		</div>
 		<table border=1 id="day_schedule_table">
 			<tr>
@@ -162,10 +187,29 @@
 					<tr>
 						<td><%=position[i] %></td>
 						<td><%=name[i] %></td>
-						<td>
+						<td style="position:relative;">
+						<div>
 							<label <%="0".equals(work[i]) ? "style='font-weight:bold;background-color:orange;'" : "style='font-weight:bold;'" %>>근무</label><input id="day_radio" type="radio" name="<%=id[i]%>_work" value="0" <%="0".equals(work[i]) ? "checked" : "" %>>
 							<label <%="0.5".equals(work[i]) ? "style='font-weight:bold;color:blue;;background-color:orange;'" : "style='font-weight:bold;color:blue;'" %>>반차</label><input id="day_radio" type="radio" name="<%=id[i]%>_work" value="0.5" <%="0.5".equals(work[i]) ? "checked" : "" %>>
 							<label <%="1".equals(work[i]) ? "style='font-weight:bold;color:red;;background-color:orange;'" : "style='font-weight:bold;color:red;'" %>>휴무</label><input id="day_radio" type="radio" name="<%=id[i]%>_work" value="1" <%="1".equals(work[i]) ? "checked" : "" %>>
+						</div>
+							<select id="day_team_select"  name="<%=id[i] %>_team" 
+							<%
+								if(work[i].equals("-")||Float.parseFloat(work[i])==1){
+									%>style="display:none;"<%
+								}else{
+									%><%
+								}
+							%>>
+								<option value="">근무조 선택
+								<%
+									for(int j=0;j<team_list.size();j++){
+										%>
+										<option value="<%=team_list.get(j) %>" <%=team[i].equals(team_list.get(j)) ? "selected" : "" %>>'<%=team_name.get(j) %>' 조 / <%=enter_time.get(j) %> ~
+										<%
+									}
+								%>
+							</select>
 						</td>
 					</tr>
 					<%

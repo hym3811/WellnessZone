@@ -101,18 +101,21 @@
 				e.printStackTrace();
 			}
 			
-			ArrayList<Integer> work_cnt = new ArrayList<Integer>();
+			int[] work_cnt = new int[day.size()];
 			
 			
 			try{//해당년도,해당월의 달력 정보 조회
-				String sql = "select distinct day,count(id) from wellness_work where year=? and month=? and work<1 group by day order by day";
-				pstmt = conn.prepareStatement(sql);
-				pstmt.setString(1, year);
-				pstmt.setString(2, month);
-				rs = pstmt.executeQuery();
-				
-				while(rs.next()){
-					work_cnt.add(rs.getInt(2));
+				for(int x=0;x<day.size();x++){
+					String sql = "select distinct day,count(id) from wellness_work where year=? and month=? and day=? and work<1 group by day";
+					pstmt = conn.prepareStatement(sql);
+					pstmt.setString(1, year);
+					pstmt.setString(2, month);
+					pstmt.setInt(3, day.get(x));
+					rs = pstmt.executeQuery();
+					
+					if(rs.next()){
+						work_cnt[x] = rs.getInt(2);
+					}
 				}
 			
 			}catch(Exception e){
@@ -268,10 +271,13 @@
 													}
 												}
 											}
-										}else{
+										}else if(length>=7){
 											%>
-											<li class="worker_list"><%=work_cnt.get(idx) %>명</li>
+											<li class="worker_list"><%=work_cnt[idx] %>명</li>
 											<%
+										}
+										if(work_cnt[idx]==0){
+											%><li class="worker_list"><input class="work_btn" type="button" value="근무설정" onclick="location.href='day_schedule.jsp?year=<%=year %>&month=<%=month %>&day=<%=day.get(idx) %>'"></li><%
 										}
 									%>
 									</ul>

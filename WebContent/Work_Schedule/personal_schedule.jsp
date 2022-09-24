@@ -97,7 +97,9 @@
 			}catch(Exception e){
 				e.printStackTrace();
 			}
-			
+			%>
+			<script>var size = <%=day.size()%>;</script>
+			<%
 			ArrayList<Integer> work_cnt = new ArrayList<Integer>();
 			
 			try{//해당년도,해당월의 달력 정보 조회
@@ -116,10 +118,11 @@
 			}
 			
 			String[] work = new String[day.size()];
+			String[] team = new String[day.size()];
 			
 			for(int k=0;k<day.size();k++){
 				try{
-					String sql = "select work from wellness_work where year=? and month = ? and day=? and id = ?";
+					String sql = "select work,team from wellness_work where year=? and month = ? and day=? and id = ?";
 					pstmt = conn.prepareStatement(sql);
 					pstmt.setString(1, year);
 					pstmt.setString(2, month);
@@ -129,6 +132,7 @@
 					
 					if(rs.next()){
 						work[k] = rs.getString(1);
+						team[k] = rs.getString(2);
 					}
 				}catch(Exception e){
 					e.printStackTrace();
@@ -148,7 +152,7 @@
 				e.printStackTrace();
 			}
 			
-			ArrayList<String> team = new ArrayList<String>();
+			ArrayList<String> team_list = new ArrayList<String>();
 			ArrayList<String> team_name = new ArrayList<String>();
 			ArrayList<String> enter_time = new ArrayList<String>();
 			ArrayList<String> exit_time = new ArrayList<String>();
@@ -158,7 +162,7 @@
 				pstmt = conn.prepareStatement(sql);
 				rs = pstmt.executeQuery();
 				while(rs.next()){
-					team.add(rs.getString(1));
+					team_list.add(rs.getString(1));
 					team_name.add(rs.getString(2));
 					enter_time.add(rs.getString(3));
 					exit_time.add(rs.getString(4));
@@ -250,9 +254,40 @@
 										<li class="personal_list" <%="1".equals(work[idx]) ? "style='background-color:orange;color:red;'" : "" %> style="color:red;">휴무<input type="radio" value="1" name="work_<%=idx %>" id="work_<%=idx%>" <%="1".equals(work[idx]) ? "checked" : "" %>></li>
 									</ul>
 									<div class="work_team">
-										<select name="team_<%=idx%>">
+										<select id="team_<%=idx %>" name="team_<%=idx%>" 
+										<%
+											if(work[idx]==null||Float.parseFloat(work[idx])==1){
+												%>
+												style="display:none;margin-top:20px;"
+												<%
+											}else{
+												%>
+												style="margin-top:20px;"
+												<%
+											}
+										%>>
 											<option value="">근무조 선택
+											<%	
+												int time_idx = 0;
+												for(int k=0;k<team_list.size();k++){
+													if(team_list.get(k).equals(team[idx])){
+														time_idx = k;
+													}
+													%>
+													<option value="<%=team_list.get(k) %>" <%=team_list.get(k).equals(team[idx]) ? "selected" : "" %>>'<%=team_name.get(k) %>' 조 / <%=enter_time.get(k) %> ~
+													<%
+												}
+											%>
 										</select>
+										<p id="time_<%=idx %>" style="font-size:0.9em;margin-top:5px;">
+										<%
+											if(work[idx]!=null&&Float.parseFloat(work[idx])<1){
+												%>
+												<%=enter_time.get(time_idx) %> ~ <%=exit_time.get(time_idx) %>
+												<%
+											}
+										%>
+										</p>
 									</div>
 								</div>
 								<%

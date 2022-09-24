@@ -12,8 +12,10 @@
 	int day = Integer.parseInt(request.getParameter("day"));
 	String[] id = request.getParameter("id_list").split(" ");
 	String[] work = new String[id.length];
+	String[] team = new String[id.length];
 	for(int i=0;i<id.length;i++){
 		work[i] = request.getParameter(id[i]+"_work");
+		team[i] = request.getParameter(id[i]+"_team");
 	}
 	
 	System.out.println(Arrays.toString(id));
@@ -30,24 +32,26 @@
 			rs = pstmt.executeQuery();
 			
 			if(rs.next()){
-				sql = "update wellness_work set work=? where year=? and month=? and day=? and id=?";
+				sql = "update wellness_work set work=?,team=? where year=? and month=? and day=? and id=?";
 				pstmt = conn.prepareStatement(sql);
 				pstmt.setString(1, work[i]);
-				pstmt.setInt(2, year);
-				pstmt.setInt(3, month);
-				pstmt.setInt(4, day);
-				pstmt.setString(5, id[i]);
+				pstmt.setString(2, team[i]);
+				pstmt.setInt(3, year);
+				pstmt.setInt(4, month);
+				pstmt.setInt(5, day);
+				pstmt.setString(6, id[i]);
 				pstmt.executeUpdate();
 				
 			}else{
 				if(work[i]!=null){pstmt.close();
-					sql = "insert into wellness_work values(?,?,?,?,'','','',?)";
+					sql = "insert into wellness_work values(?,?,?,?,?,'','',?)";
 					pstmt = conn.prepareStatement(sql);
 					pstmt.setInt(1, year);
 					pstmt.setInt(2, month);
 					pstmt.setInt(3, day);
 					pstmt.setString(4, id[i]);
-					pstmt.setString(5, work[i]);
+					pstmt.setString(5, team[i]);
+					pstmt.setString(6, work[i]);
 					pstmt.executeUpdate();
 				}
 			}

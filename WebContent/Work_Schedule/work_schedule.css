@@ -130,3 +130,23 @@
 	height:70px;
 	z-index:9;
 }
+#day_team_select{
+	position:absolute;
+	right:150px;
+	top:5px;
+}
+.work_btn{
+	/* 200,80 - 198,78 */
+	width:68px;
+	height:28px;
+	margin-left:60px;
+	margin-top:22px;
+}
+.work_btn:hover{
+	cursor:pointer;
+	background-color:skyblue;
+	font-weight:bold;
+	border:none;
+	box-shadow: 0 0 10px 5px blue;
+	transition:0.5s;
+}

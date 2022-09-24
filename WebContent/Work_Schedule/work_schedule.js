@@ -184,3 +184,44 @@ $("#month_select").click(function(){
 	})
 	
 })
+
+for(let i=0;i<31;i++){
+	$("input[name='work_"+i+"']").change(function(){
+		if(this.value<1){
+			$("select[name='team_"+i+"'").css({
+				"display":"block"
+			})
+			$("#time_"+i).css({
+				"display":"block"
+			})
+		}else{
+			$("select[name='team_"+i+"'").css({
+				"display":"none"
+			})
+			$("#time_"+i).css({
+				"display":"none"
+			})
+		}
+	});
+}
+
+if(document.form.day_id_size.value!=""&&document.form.day_id_size.value!=null){
+	var day_id_size = document.form.day_id_size.value;
+	var day_id_list = document.form.id_list.value.split(" ");
+}
+for(let i=0;i<day_id_size;i++){
+	$("input[name='"+day_id_list[i]+"_work']").change(function(){
+		if(this.value<1){
+			$("select[name='"+day_id_list[i]+"_team']").css({
+				"display":"block",
+				"position":"absolute",
+				"right":"150px",
+				"top":"5px"
+			})
+		}else{
+			$("select[name='"+day_id_list[i]+"_team']").css({
+				"display":"none"
+			})
+		}
+	})
+}
