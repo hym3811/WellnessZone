@@ -23,9 +23,24 @@ create table wellness_work(
 	month number(2),
 	day number(2),
 	id varchar2(12),
+	team varchar2(30),
 	enter timestamp,
 	exit timestamp,
 	work varchar2(3) not null,
 	primary key(year,month,day,id));
 
+	
+drop table wellness_team;
+create table wellness_team(
+	team number(2) primary key,
+	team_name varchar2(30) not null,
+	enter_time varchar2(10) not null,
+	exit_time varchar2(10) not null);
+	
+insert into wellness_team values('1','가','09:45','20:00');
+insert into wellness_team values('2','나','10:15','20:30');
+insert into wellness_team values('3','A','10:45','21:00');
+insert into wellness_team values('4','B','11:15','21:30');
+insert into wellness_team values('5','C','11:45','22:00');
+	
 commit;

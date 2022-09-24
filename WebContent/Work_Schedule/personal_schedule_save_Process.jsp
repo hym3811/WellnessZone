@@ -33,7 +33,7 @@
 				
 				if(!rs.next()){
 					pstmt.close();
-					sql = "insert into wellness_work values(?,?,?,?,'','',?)";
+					sql = "insert into wellness_work values(?,?,?,?,'','','',?)";
 					pstmt = conn.prepareStatement(sql);
 					pstmt.setString(1, year);
 					pstmt.setString(2, month);

@@ -13,7 +13,7 @@
 %>
 	<header>
 		<h1>Wellness Zone</h1>
-		<div style="width:320px;height:100px;position:absolute;right:0;top:0;background-color:black;">
+		<div style="width:350px;height:100px;position:absolute;right:0;top:0;background-color:black;">
 			<div class = "header_name"><%=login_name %><label style="font-size:0.6em;"> 님 접속중...</label></div>
 			<div class = "header_clock"></div>
 		</div>
@@ -49,9 +49,9 @@ function getTime(){
     }
     
     if(pm){
-    	clock.innerHTML = hour +" : " + minutes + " : " + seconds + " a.m.";
+    	clock.innerHTML = hour +" : " + minutes + " : " + seconds + " (오후)";
     }else{
-    	clock.innerHTML = hour +" : " + minutes + " : " + seconds + " p.m.";
+    	clock.innerHTML = hour +" : " + minutes + " : " + seconds + " (오전)";
     }
     
     

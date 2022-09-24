@@ -147,6 +147,25 @@
 			}catch(Exception e){
 				e.printStackTrace();
 			}
+			
+			ArrayList<String> team = new ArrayList<String>();
+			ArrayList<String> team_name = new ArrayList<String>();
+			ArrayList<String> enter_time = new ArrayList<String>();
+			ArrayList<String> exit_time = new ArrayList<String>();
+			
+			try{
+				String sql = "select team,team_name,enter_time,exit_time from wellness_team";
+				pstmt = conn.prepareStatement(sql);
+				rs = pstmt.executeQuery();
+				while(rs.next()){
+					team.add(rs.getString(1));
+					team_name.add(rs.getString(2));
+					enter_time.add(rs.getString(3));
+					exit_time.add(rs.getString(4));
+				}
+			}catch(Exception e){
+				e.printStackTrace();
+			}
 		%>
 		<!-- 년/월 변경을 위한 히든변수 -->
 		<input type="hidden" name="year" value="<%=year %>">
@@ -213,7 +232,7 @@
 							
 							if(check[0]&&!check[1]){
 								%>
-								<div class="schedule_box">
+								<div class="schedule_box" style="position:relative;">
 									<div class="schedule_day" id="day_<%=day.get(idx) %>" onclick="location.href='day_schedule.jsp?year=<%=year %>&month=<%=month %>&day=<%=day.get(idx) %>'"
 									<%
 										if(week.get(idx)==0){
@@ -230,6 +249,11 @@
 										<li class="personal_list" <%="0.5".equals(work[idx]) ? "style='background-color:orange;color:blue;'" : "" %> style="color:blue;">반차<input type="radio" value="0.5" name="work_<%=idx %>" id="work_<%=idx%>" <%="0.5".equals(work[idx]) ? "checked" : "" %>></li>
 										<li class="personal_list" <%="1".equals(work[idx]) ? "style='background-color:orange;color:red;'" : "" %> style="color:red;">휴무<input type="radio" value="1" name="work_<%=idx %>" id="work_<%=idx%>" <%="1".equals(work[idx]) ? "checked" : "" %>></li>
 									</ul>
+									<div class="work_team">
+										<select name="team_<%=idx%>">
+											<option value="">근무조 선택
+										</select>
+									</div>
 								</div>
 								<%
 							}

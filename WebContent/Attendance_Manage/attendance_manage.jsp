@@ -19,21 +19,27 @@
 	ResultSet rs = null;
 	
 	String today = null;;
+	String year = request.getParameter("year");
+	String month = request.getParameter("month");
+	String day = request.getParameter("day");
 	
-	try{
-		String sql = "select sysdate from dual";
-		pstmt = conn.prepareStatement(sql);
-		rs = pstmt.executeQuery();
-		if(rs.next()){
-			today = rs.getString(1).substring(0,10);
+	if(request.getParameter("year")==null){
+		try{
+			String sql = "select sysdate from dual";
+			pstmt = conn.prepareStatement(sql);
+			rs = pstmt.executeQuery();
+			if(rs.next()){
+				today = rs.getString(1).substring(0,10);
+			}
+			year = today.substring(0,4);
+			month = today.substring(5,7);
+			day = today.substring(8,10);
+		}catch(Exception e){
+			e.printStackTrace();
 		}
-	}catch(Exception e){
-		e.printStackTrace();
+	}else{
+		today = year+"-"+month+"-"+day;
 	}
-	
-	String year = today.substring(0,4);
-	String month = today.substring(5,7);
-	String day = today.substring(8,10);
 	
 	int size = 0;
 	
@@ -97,46 +103,57 @@
 				<th>퇴근정보</th>
 			</tr>
 			<%
-				for(int i=0;i<size;i++){
+				if(size==0){
 					%>
-						<tr>
-							<td style="width:150px;"><%=position[i] %></td>
-							<td style="width:150px;"><%=name[i] %></td>
-							<td style="width:300px;">
-								<%
-									if(enter[i]==null){
-										%>
-											비밀번호 : <input type="password" name="enter_<%=id[i]%>">
-											<input type="button" value="출근" onclick="if(document.form.enter_<%=id[i] %>.value!=<%=pass[i] %>){alert('비밀번호 틀림');return false;}else{location.href='attendance_save_Process.jsp?ctg=enter&id=<%=id[i]%>&year=<%=year%>&month=<%=month%>&day=<%=day%>'}">
-										<%
-									}else{
-										%><%=enter[i].substring(11,19)%><%
-									}
-								%>
-							</td>
-							<td style="width:300px;">
-								<%
-									if(exit[i]==null){
-										if(enter[i]!=null){
+					<tr>
+						<td colspan=4>근무 인원 없음</td>
+					</tr>
+					<%
+				}else{
+					for(int i=0;i<size;i++){
+						%>
+							<tr>
+								<td style="width:150px;"><%=position[i] %></td>
+								<td style="width:150px;"><%=name[i] %></td>
+								<td style="width:300px;">
+									<%
+										if(enter[i]==null){
 											%>
-												비밀번호 : <input type="password" name="exit_<%=id[i]%>">
-												<input type="button" value="퇴근" onclick="if(document.form.exit_<%=id[i] %>.value!=<%=pass[i] %>){alert('비밀번호 틀림');return false;}else{location.href='attendance_save_Process.jsp?ctg=exit&id=<%=id[i]%>&year=<%=year%>&month=<%=month%>&day=<%=day%>'}">
+												비밀번호 : <input type="password" name="enter_<%=id[i]%>">
+												<input type="button" value="출근" onclick="if(document.form.enter_<%=id[i] %>.value!=<%=pass[i] %>){alert('비밀번호 틀림');return false;}else{location.href='attendance_save_Process.jsp?ctg=enter&id=<%=id[i]%>&year=<%=year%>&month=<%=month%>&day=<%=day%>'}">
 											<%
 										}else{
-											%>
-											출근 정보 등록 필요
-											<%
+											%><%=enter[i].substring(11,19)%><%
 										}
-									}else{
-										%><%=exit[i].substring(11,19)%><%
-									}
-								%>
-							</td>
-						</tr>
-					<%
+									%>
+								</td>
+								<td style="width:300px;">
+									<%
+										if(exit[i]==null){
+											if(enter[i]!=null){
+												%>
+													비밀번호 : <input type="password" name="exit_<%=id[i]%>">
+													<input type="button" value="퇴근" onclick="if(document.form.exit_<%=id[i] %>.value!=<%=pass[i] %>){alert('비밀번호 틀림');return false;}else{location.href='attendance_save_Process.jsp?ctg=exit&id=<%=id[i]%>&year=<%=year%>&month=<%=month%>&day=<%=day%>'}">
+												<%
+											}else{
+												%>
+												출근 등록 필요
+												<%
+											}
+										}else{
+											%><%=exit[i].substring(11,19)%><%
+										}
+									%>
+								</td>
+							</tr>
+						<%
+					}
 				}
 			%>
 		</table>
+		<div class="list_btn" onclick="location.href='attendance_main.jsp?year=<%=year%>&month=<%=month%>'">
+			목록
+		</div>
 	</form>
 </section>
 <%@ include file="../footer.jsp" %>

@@ -30,9 +30,8 @@ commit;
 year	/	number(4)		/	primary key
 month	/	number(2)		/	primary key
 day		/	number(2)		/	primary key
-week	/	number(1)			/	primary key
-			=> 1:일 / 2:월 / 3:화 / 4:수 / 5:목 / 6:금 / 7:토
 id		/	varchar2(12)	/	primary key
+team	/	varchar2(30)
 enter	/	timestamp
 exit	/	timestamp
 work	/	varchar2(3)		/	not null
@@ -45,6 +44,7 @@ create table wellness_work(
 	month number(2),
 	day number(2),
 	id varchar2(12),
+	team varchar2(30),
 	enter timestamp,
 	exit timestamp,
 	work varchar2(3) not null,
@@ -53,3 +53,18 @@ create table wellness_work(
 commit;
 
 -----------------------------------------------------------------------------------------
+
+***근무조 리스트***
+
+team		/	number(2)		/	primary key
+team_name	/	varchar2(30)	/	not null
+enter_time	/	varchar2(10)	/	not null
+exit_time	/	varchar2(10)	/	not null
+
+=> sql
+drop table wellness_team;
+create table wellness_team(
+	team number(2) primary key,
+	team_name varchar2(30) not null,
+	enter_time varchar2(10) not null,
+	exit_time varchar2(10) not null);

@@ -1,6 +1,6 @@
 @charset "UTF-8";
 .schedule_line{
-	width:1050px;
+	width:1400px;
 	height:80px;
 	margin: 0 auto;
 }
@@ -8,7 +8,7 @@
 	float:left;
 }
 .schedule_week{
-	width:148px;
+	width:198px;
 	height:28px;
 	border:1px solid black;
 	text-align:center;
@@ -17,7 +17,7 @@
 }
 .schedule_box{
 	position:relative;
-	width:148px;
+	width:198px;
 	height:78px;
 	border:1px solid black;
 	text-align:center;
@@ -121,4 +121,12 @@
 }
 #day_radio{
 	margin:0 20px;
+}
+.work_team{
+	position:absolute;
+	right:25px;
+	top:4px;
+	width:100px;
+	height:70px;
+	z-index:9;
 }
