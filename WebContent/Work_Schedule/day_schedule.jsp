@@ -78,7 +78,7 @@
 	int i = 0;
 	
 	try{
-		String sql = "select id,name,position from wellness_account where rank>=3 and joindate<=? and (outdate>=? or outdate='') order by rank,name";
+		String sql = "select id,name,position from wellness_account where rank>=3 and joindate<=? and (outdate>=? or outdate='') order by name";
 		pstmt = conn.prepareStatement(sql);
 		pstmt.setString(1, select_date);
 		pstmt.setString(2, select_date);

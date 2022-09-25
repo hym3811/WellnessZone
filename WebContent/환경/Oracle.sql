@@ -28,6 +28,11 @@ create table wellness_work(
 	exit varchar2(10),
 	work varchar2(3) not null,
 	primary key(year,month,day,id));
+	
+insert into wellness_work values(2022,9,1,'c1234',1,'09:40','20:01','0');
+insert into wellness_work values(2022,9,1,'d1234',1,'09:45','20:01','0');
+insert into wellness_work values(2022,9,1,'e1234',1,'09:48','20:01','0');
+insert into wellness_work values(2022,9,1,'f1234',1,'09:50','20:01','0');
 
 	
 drop table wellness_team;

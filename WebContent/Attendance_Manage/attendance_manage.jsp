@@ -85,7 +85,7 @@
 	String[] pass = new String[size];
 	
 	try{
-		String sql = "select a.id,b.name,b.position,a.team,a.enter,a.exit,b.pass from wellness_work a join wellness_account b on a.id=b.id where year=? and month=? and day=? and work<1";
+		String sql = "select a.id,b.name,b.position,a.team,a.enter,a.exit,b.pass from wellness_work a join wellness_account b on a.id=b.id where year=? and month=? and day=? and work<1 order by b.name";
 		pstmt = conn.prepareStatement(sql);
 		pstmt.setString(1, year);
 		pstmt.setString(2, month);
@@ -199,7 +199,7 @@
 												<%
 											}
 										}else{
-											%><%=exit[i].substring(11,19)%><%
+											%><%=exit[i].substring(0)%><%
 										}
 									%>
 								</td>
