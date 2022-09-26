@@ -83,9 +83,11 @@
 	String[] enter = new String[size];
 	String[] exit = new String[size];
 	String[] pass = new String[size];
+	float[] work = new float[size];
+	int[] harf = new int[size];
 	
 	try{
-		String sql = "select a.id,b.name,b.position,a.team,a.enter,a.exit,b.pass from wellness_work a join wellness_account b on a.id=b.id where year=? and month=? and day=? and work<1 order by b.name";
+		String sql = "select a.id,b.name,b.position,a.team,a.enter,a.exit,b.pass,a.work,a.harf from wellness_work a join wellness_account b on a.id=b.id where year=? and month=? and day=? and work<1 order by b.name";
 		pstmt = conn.prepareStatement(sql);
 		pstmt.setString(1, year);
 		pstmt.setString(2, month);
@@ -102,6 +104,8 @@
 			enter[i] = rs.getString(5);
 			exit[i] = rs.getString(6);
 			pass[i] = rs.getString(7);
+			work[i] = rs.getFloat(8);
+			harf[i] = rs.getInt(9);
 			
 			i++;
 		}
@@ -154,12 +158,17 @@
 													int enter_hour = Integer.parseInt(enter_time.get(team[i]-1).substring(0,2));
 													int enter_minute = Integer.parseInt(enter_time.get(team[i]-1).substring(3));
 													
+													if(work[i]==0.5f){
+														if(harf[i]==0){
+															enter_hour = enter_hour + 5;
+														}
+													}
 													
 													if(hour-enter_hour==0){
 														int diff = minute-enter_minute;
 														if(diff>0){
 															if(diff>=5){
-																%><div class="enter_info" id="info_red"> 00시간 <%=diff<10 ? "0"+Integer.toString(diff) : diff %>분 지각</div><%
+																%><div class="enter_info" id="info_red"> 00시간 <%=diff<10 ? "0"+Integer.toString(Math.abs(diff)) : Math.abs(diff) %>분 지각</div><%
 															}else if(diff<5&&diff>1){
 																%><div class="enter_info" id="info_orange"> 00시간 <%=diff<10 ? "0"+Integer.toString(diff) : diff %>분 지각</div><%
 															}
@@ -199,9 +208,44 @@
 												<%
 											}
 										}else{
-											%><%=exit[i].substring(0)%><%
+											%><div><div style="float:left;margin-left:20px;background-color:black;color:white;font-weight:bold;"><%=exit[i].substring(0)%> 퇴근</div><div style="float:left;">&nbsp;&nbsp;&nbsp;</div><%
+												
+													
+													int hour = Integer.parseInt(enter[i].substring(0,2));
+													int minute = Integer.parseInt(enter[i].substring(3));
+													int exit_hour = Integer.parseInt(exit[i].substring(0,2));
+													int exit_minute = Integer.parseInt(exit[i].substring(3));
+													
+													System.out.print(hour+":"+minute+" / "+exit_hour+":"+exit_minute);
+													
+													int temp = ( exit_hour - hour ) * 60;
+													if(exit_minute-minute<0){
+														temp = temp + exit_minute - minute ;
+													}else{
+														temp = temp + exit_minute - minute;
+													}
+													System.out.print(" "+temp+"\n");
+													
+													int in_work = 0;
+													if(work[i]==0){
+														in_work = ( 10 * 60 ) + 15;
+													}else if(work[i]==0.5f){
+														in_work = ( 5 * 60 ) + 15;
+													}
+													
+													int diff = in_work - temp;
+													
+													%><div class="enter_info" <%
+															if(diff>0){%>style="background-color:red;color:white;"<%}
+															else{%>style="background-color:green;color:white;"<%}
+															%>>
+													<%=diff==0 ? "초과부족 없음" : (Math.abs(diff/60)<10 ? "0"+Integer.toString(Math.abs(diff/60))+"시간" : Math.abs(diff/60) + "시간") %>
+													<%=diff==0 ? "" : (Math.abs(diff%60)<10 ? "0"+Integer.toString(Math.abs(diff%60))+"분" : Math.abs(diff%60)+"분") %>
+													<%=diff>0 ? "부족" : (diff<0 ? "초과" : "") %>
+													</div><%
+												
 										}
-									%>
+									%></div>
 								</td>
 							</tr>
 						<%

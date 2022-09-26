@@ -119,10 +119,11 @@
 			
 			String[] work = new String[day.size()];
 			String[] team = new String[day.size()];
+			int[] harf = new int[day.size()];
 			
 			for(int k=0;k<day.size();k++){
 				try{
-					String sql = "select work,team from wellness_work where year=? and month = ? and day=? and id = ?";
+					String sql = "select work,team,harf from wellness_work where year=? and month = ? and day=? and id = ?";
 					pstmt = conn.prepareStatement(sql);
 					pstmt.setString(1, year);
 					pstmt.setString(2, month);
@@ -133,6 +134,7 @@
 					if(rs.next()){
 						work[k] = rs.getString(1);
 						team[k] = rs.getString(2);
+						harf[k] = rs.getInt(3);
 					}
 				}catch(Exception e){
 					e.printStackTrace();
@@ -253,41 +255,54 @@
 										<li class="personal_list" <%="0.5".equals(work[idx]) ? "style='background-color:orange;color:blue;'" : "" %> style="color:blue;">반차<input type="radio" value="0.5" name="work_<%=idx %>" id="work_<%=idx%>" <%="0.5".equals(work[idx]) ? "checked" : "" %>></li>
 										<li class="personal_list" <%="1".equals(work[idx]) ? "style='background-color:orange;color:red;'" : "" %> style="color:red;">휴무<input type="radio" value="1" name="work_<%=idx %>" id="work_<%=idx%>" <%="1".equals(work[idx]) ? "checked" : "" %>></li>
 									</ul>
-									<div class="work_team">
-										<select id="team_<%=idx %>" name="team_<%=idx%>" 
-										<%
-											if(work[idx]==null||Float.parseFloat(work[idx])==1){
-												%>
-												style="display:none;margin-top:20px;"
+									<div style="position:absolute;right:0;top:0;width:115px;height:78px;">
+										<div style="position:relative;">
+											<div class="work_harf">
+												<select id="harf_<%=idx %>" name="harf_<%=idx %>"
 												<%
-											}else{
-												%>
-												style="margin-top:20px;"
-												<%
-											}
-										%>>
-											<option value="">근무조 선택
-											<%	
-												int time_idx = 0;
-												for(int k=0;k<team_list.size();k++){
-													if(team_list.get(k).equals(team[idx])){
-														time_idx = k;
+													if(work[idx]==null||Float.parseFloat(work[idx])==1||Float.parseFloat(work[idx])!=0.5f){
+														%>
+														style="display:none;"
+														<%
 													}
-													%>
-													<option value="<%=team_list.get(k) %>" <%=team_list.get(k).equals(team[idx]) ? "selected" : "" %>>'<%=team_name.get(k) %>' 조 / <%=enter_time.get(k) %> ~
-													<%
-												}
-											%>
-										</select>
-										<p id="time_<%=idx %>" style="font-size:0.9em;margin-top:5px;">
-										<%
-											if(work[idx]!=null&&Float.parseFloat(work[idx])<1){
-												%>
-												<%=enter_time.get(time_idx) %> ~ <%=exit_time.get(time_idx) %>
+												%>>
+													<option value="0" <%=harf[idx]==0 ? "selected" : "" %>>오전
+													<option value="1" <%=harf[idx]==1 ? "selected" : "" %>>오후
+												</select>
+											</div>
+											<div class="work_team">
+												<select id="team_<%=idx %>" name="team_<%=idx%>" 
 												<%
-											}
-										%>
-										</p>
+													if(work[idx]==null||Float.parseFloat(work[idx])==1){
+														%>
+														style="display:none;"
+														<%
+													}
+												%>>
+													<option value="">근무조 선택
+													<%	
+														int time_idx = 0;
+														for(int k=0;k<team_list.size();k++){
+															if(team_list.get(k).equals(team[idx])){
+																time_idx = k;
+															}
+															%>
+															<option value="<%=team_list.get(k) %>" <%=team_list.get(k).equals(team[idx]) ? "selected" : "" %>>'<%=team_name.get(k) %>' 조 / <%=enter_time.get(k) %> ~
+															<%
+														}
+													%>
+												</select>
+												<p id="time_<%=idx %>" style="font-size:0.9em;margin-top:5px;">
+												<%
+													if(work[idx]!=null&&Float.parseFloat(work[idx])<1){
+														%>
+														<%=enter_time.get(time_idx) %> ~ <%=exit_time.get(time_idx) %>
+														<%
+													}
+												%>
+												</p>
+											</div>
+										</div>
 									</div>
 								</div>
 								<%

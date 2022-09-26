@@ -124,16 +124,28 @@
 }
 .work_team{
 	position:absolute;
-	right:25px;
-	top:4px;
-	width:100px;
-	height:70px;
-	z-index:9;
+	width:115px;
+	height:25px;
+	right:10px;
+	top:30px;
+}
+.work_harf{
+	position:absolute;
+	text-align:left;
+	width:50px;
+	height:25px;
+	right:75px;
+	top:5px;
 }
 #day_team_select{
 	position:absolute;
-	right:150px;
+	right:130px;
 	top:5px;
+}
+#day_harf_select{
+	position:absolute;
+	top:5px;
+	right:60px;
 }
 .work_btn{
 	/* 200,80 - 198,78 */

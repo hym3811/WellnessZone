@@ -202,6 +202,15 @@ for(let i=0;i<31;i++){
 				"display":"none"
 			})
 		}
+		if(this.value==0.5){
+			$("select[name='harf_"+i+"'").css({
+				"display":"block"
+			})
+		}else{
+			$("select[name='harf_"+i+"'").css({
+				"display":"none"
+			})
+		}
 	});
 }
 
@@ -215,11 +224,23 @@ for(let i=0;i<day_id_size;i++){
 			$("select[name='"+day_id_list[i]+"_team']").css({
 				"display":"block",
 				"position":"absolute",
-				"right":"150px",
+				"right":"130px",
 				"top":"5px"
 			})
 		}else{
 			$("select[name='"+day_id_list[i]+"_team']").css({
+				"display":"none"
+			})
+		}
+		if(this.value==0.5){
+			$("select[name='"+day_id_list[i]+"_harf']").css({
+				"display":"block",
+				"position":"absolute",
+				"right":"60px",
+				"top":"5px"
+			})
+		}else{
+			$("select[name='"+day_id_list[i]+"_harf']").css({
 				"display":"none"
 			})
 		}

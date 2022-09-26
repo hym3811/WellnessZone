@@ -101,12 +101,14 @@
 	
 	String[] work = null;
 	String[] team = null;
+	String[] harf = null;
 	try{
 		StringBuilder work_sb = new StringBuilder();
 		StringBuilder team_sb = new StringBuilder();
+		StringBuilder harf_sb = new StringBuilder();
 		
 		for(int j=0;j<i;j++){
-			String sql = "select team,work from wellness_work where year=? and month=? and day=? and id=?";
+			String sql = "select team,work,harf from wellness_work where year=? and month=? and day=? and id=?";
 			pstmt = conn.prepareStatement(sql);
 			pstmt.setString(1, year);
 			pstmt.setString(2, month);
@@ -117,13 +119,16 @@
 			if(rs.next()){
 				team_sb.append(rs.getString(1)).append(" ");
 				work_sb.append(rs.getString(2)).append(" ");
+				harf_sb.append(rs.getString(3)).append(" ");
 			}else{
 				work_sb.append("-").append(" ");
 				team_sb.append("-").append(" ");
+				harf_sb.append("-").append(" ");
 			}
 		}
 		work = work_sb.toString().split(" ");
 		team = team_sb.toString().split(" ");
+		harf = harf_sb.toString().split(" ");
 	}catch(Exception e){
 		e.printStackTrace();
 	}//System.out.println(Arrays.toString(work));
@@ -209,6 +214,17 @@
 										<%
 									}
 								%>
+							</select>
+							<select id="day_harf_select" name="<%=id[i] %>_harf"
+							<%
+								if(work[i].equals("-")||Float.parseFloat(work[i])!=0.5){
+									%>style="display:none;"<%
+								}else{
+									%><%
+								}
+							%>>
+								<option value="0" <%="0".equals(harf[i]) ? "selected" : "" %>>오전
+								<option value="1" <%="1".equals(harf[i]) ? "selected" : "" %>>오후
 							</select>
 						</td>
 					</tr>

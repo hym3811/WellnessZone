@@ -36,6 +36,8 @@ enter	/	varchar2(10)
 exit	/	varchar2(10)
 work	/	varchar2(3)		/	not null
 			=> 0: 근무 / 0.5: 반차 / 1: 휴무
+harf	/	number(1)
+			=> 0: 오전반차 / 1: 오후반차
 
 => sql
 drop table wellness_work;
@@ -48,6 +50,7 @@ create table wellness_work(
 	enter timestamp,
 	exit timestamp,
 	work varchar2(3) not null,
+	harf number(1),
 	primary key(year,month,day,id));
 
 commit;
