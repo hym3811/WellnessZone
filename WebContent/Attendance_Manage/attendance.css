@@ -23,6 +23,12 @@
 	text-align:center;
 	font-weight:bold;
 }
+.schedule_box:hover{
+	box-shadow: 0 0 5px 5px #555555 inset;
+	background-color:yellow;
+	cursor:pointer;
+	transition:0.3s;
+}
 .schedule_day{
 	position:absolute;
 	right:0px;
@@ -30,18 +36,6 @@
 	width:20px;
 	height:20px;
 	color:white;
-}
-.schedule_day:hover{
-	width:30px;
-	height:30px;
-	font-size:1.5em;
-	cursor:pointer;
-	right:-5px;
-	top:-5px;
-	z-index:9;
-	background-color:orange!important;
-	border-radius:5px;
-	transition:0.3s;
 }
 .schedule_select{
 	width:120px;
@@ -66,27 +60,6 @@
 	color:red;
 	
 }
-.worker_ul{
-	margin-top:5px;
-}
-.worker_list{
-	list-style:none;
-	text-align:left;
-	text-indent:10px;
-	float:left;
-}
-.worker_list:hover{
-	color:red;
-	font-weight:bold;
-	cursor:pointer;
-	text-decoration:underline;
-}
-.personal_list{
-	margin-left:15px;
-	width:50px;
-	list-style:none;
-	text-align:left;
-}
 .save_btn{
 	background-color:#393939;
 	color:white;
@@ -107,58 +80,7 @@
 	cursor:pointer;
 	transition:0.7s;
 }
-#day_schedule_table{
-	margin:0 auto;
-	margin-top:30px;
-	width:1050px;
-	text-align:center;
-}
-#day_schedule_table th,td{
-	height:30px;
-}
-#day_schedule_table th{
-	background-color:lightgray;
-}
-#day_radio{
-	margin:0 20px;
-}
-.work_team{
-	position:absolute;
-	width:115px;
-	height:25px;
-	right:10px;
-	top:30px;
-}
-.work_harf{
-	position:absolute;
-	text-align:left;
-	width:50px;
-	height:25px;
-	right:75px;
-	top:5px;
-}
-#day_team_select{
-	position:absolute;
-	right:130px;
-	top:5px;
-}
-#day_harf_select{
-	position:absolute;
-	top:5px;
-	right:60px;
-}
-.work_btn{
-	/* 200,80 - 198,78 */
-	width:68px;
-	height:28px;
-	margin-left:60px;
-	margin-top:22px;
-}
-.work_btn:hover{
-	cursor:pointer;
-	background-color:skyblue;
-	font-weight:bold;
-	border:none;
-	box-shadow: 0 0 10px 5px blue;
-	transition:0.5s;
+.attendance_ul{
+	margin-top:3px;
+	margin-left:3px;
 }

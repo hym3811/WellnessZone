@@ -83,25 +83,7 @@
 			//조회 년,월에 근무 가능한 이름 목록
 			String last = year+"-"+month+"-"+Integer.toString(day.size());
 			
-			ArrayList<String> select_name = new ArrayList<String>();
-			ArrayList<String> select_position = new ArrayList<String>();
-			try{
-				String sql = "select name,position from wellness_account where rank>=3 and joindate<=? and outdate>? order by joindate";
-				pstmt = conn.prepareStatement(sql);
-				pstmt.setString(1, start);
-				pstmt.setString(2, last);
-				rs = pstmt.executeQuery();
-				while(rs.next()){
-					select_name.add(rs.getString(1));
-					select_position.add(rs.getString(2));
-				}
-			}catch(Exception e){
-				e.printStackTrace();
-			}
-			
 			int[] work_cnt = new int[day.size()];
-			
-			
 			try{//해당년도,해당월의 달력 정보 조회
 				for(int x=0;x<day.size();x++){
 					String sql = "select distinct day,count(id) from wellness_work where year=? and month=? and day=? and work<1 group by day";
@@ -119,26 +101,33 @@
 			}catch(Exception e){
 				e.printStackTrace();
 			}
-
-			String[] id = new String[day.size()];
-			String[] name = new String[day.size()];
-			String[] work = new String[day.size()];
 			
+			String[] team_name = new String[day.size()];
+			String[] team_cnt = new String[day.size()];
 			try{
-				for(int z=0;z<day.size();z++){
-					String sql = "select a.id,b.name,a.day,a.work from wellness_work a join wellness_account b on a.id=b.id where year=? and month=? and day=? and b.rank>=3 order by a.day,b.name";
+				for(int x=0;x<day.size();x++){
+					StringBuilder sb_team_name = new StringBuilder();
+					StringBuilder sb_team_cnt = new StringBuilder();
+					
+					String sql = "select a.team,a.team_name,count(b.id) from wellness_team a join wellness_work b on a.team=b.team where year=? and month=? and day=? group by a.team,a.team_name order by a.team";
 					pstmt = conn.prepareStatement(sql);
 					pstmt.setString(1, year);
 					pstmt.setString(2, month);
-					pstmt.setInt(3, z+1);
-					rs=pstmt.executeQuery();
+					pstmt.setInt(3, x+1);
+					rs = pstmt.executeQuery();
 					
 					while(rs.next()){
-						if(id[z]==null) id[z]=rs.getString(1); else id[z] = id[z] + " "+rs.getString(1);
-						if(name[z]==null) name[z]=rs.getString(2); else name[z] = name[z] + " "+rs.getString(2);
-						if(work[z]==null) work[z]=rs.getString(4); else work[z] = work[z] + " "+rs.getString(4);
+						sb_team_name.append(rs.getString(2)).append(" ");
+						sb_team_cnt.append(rs.getString(3)).append(" ");
 					}
-				}
+					if(sb_team_name.toString().equals("")){
+						team_name[x] = "-";
+						team_cnt[x] = "-";
+					}else{
+						team_name[x] = sb_team_name.toString();
+						team_cnt[x] = sb_team_cnt.toString();
+					}
+				}System.out.println(Arrays.toString(team_name));System.out.println(Arrays.toString(team_cnt));
 			}catch(Exception e){
 				e.printStackTrace();
 			}
@@ -149,7 +138,7 @@
 		<input type="hidden" name="year" value="<%=year %>">
 		<input type="hidden" name="month" value="<%=month %>">
 		
-		<h3 class="title">근무표</h3>
+		<h3 class="title">출퇴근 관리</h3>
 		
 		<div class="schedule_line" style="position:relative;height:50px!important;margin:20px auto;">
 			<div class="schedule_btn" id="year_btn1" onclick="year(-1)">◀</div>
@@ -158,36 +147,6 @@
 			<div class="schedule_btn" id="month_btn1" onclick="month(-1)">▼</div>
 			<div class="schedule_select" id="month_select" style="color:purple;font-weight:bold;"><%=month %></div>
 			<div class="schedule_btn" id="month_btn2" onclick="month(1)">▲</div>
-			<div style="position:absolute;right:220px;top:-5px;font-weight:bold;">개인 근무표 설정</div>
-			<div style="position:absolute;right:20px;top:20px;">
-				<select name="search_option" onchange="searchOption()">
-					<option value="">검색 조건 선택
-					<option value="name" <%="name".equals(request.getParameter("search_option")) ? "selected" : "" %>>이름
-					<option value="id" <%="id".equals(request.getParameter("search_option")) ? "selected" : "" %>>아이디
-					<option value="choice" <%="choice".equals(request.getParameter("search_option")) ? "selected" : "" %>>직접 선택
-				</select>
-				<%
-					if("choice".equals(request.getParameter("search_option"))){
-						%>
-						<select name="search_input" style="width:173px;">
-							<option value="">직원 선택
-							<%
-								for(int p=0;p<select_name.size();p++){
-									%>
-									<option value="<%=select_name.get(p)%>"><%=select_name.get(p)%> <%=select_position.get(p) %>
-									<%	
-								}
-							%>
-						</select>
-						<%
-					}else{
-						%>
-						<input type="text" name="search_input">
-						<%
-					}
-				%>
-				<input type="button" value="이동" onclick="search_move()">
-			</div>
 		</div>
 		
 		<div class="schedule_line" style="height:30px!important;">
@@ -238,8 +197,8 @@
 							
 							if(check[0]&&!check[1]){
 								%>
-								<div class="schedule_box">
-									<div class="schedule_day" id="day_<%=day.get(idx) %>" onclick="location.href='day_schedule.jsp?year=<%=year %>&month=<%=month %>&day=<%=day.get(idx) %>'"
+								<div class="schedule_box" onclick="location.href='attendance_manage.jsp?year=<%=year%>&month=<%=month%>&day=<%=day.get(idx)%>'">
+									<div class="schedule_day" id="day_<%=day.get(idx) %>"
 									<%
 										if(week.get(idx)==0){
 											%>style="background-color:red;"<%
@@ -250,8 +209,8 @@
 										}
 									%>
 									><%=day.get(idx) %></div>
-									<ul class="worker_ul">
-									
+									<ul class="attendance_ul">
+									////
 									</ul>
 								</div>
 								<%
@@ -295,5 +254,6 @@
 </section>
 <%@ include file="../footer.jsp" %>
 <% Close.close(pstmt);Close.close(rs); %>
+<script src="attendance.js"></script>
 </body>
 </html>
