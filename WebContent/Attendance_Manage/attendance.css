@@ -60,7 +60,8 @@
 	color:red;
 	
 }
-.save_btn{
+.list_btn{
+	float:left;
 	background-color:#393939;
 	color:white;
 	font-weight:bold;
@@ -71,7 +72,7 @@
 	text-align:center;
 	line-height:25px;
 }
-.save_btn:hover{
+.list_btn:hover{
 	background-color:white;
 	color:black;
 	border:1px solid black;
@@ -83,4 +84,26 @@
 .attendance_ul{
 	margin-top:3px;
 	margin-left:3px;
+}
+.attendance_li{
+	list-style:none;
+	float:left;
+	width:90px;
+}
+.attendance_table{
+	width:900px;
+	margin:0 auto;
+	text-align:center;
+}
+.enter_info{
+	float:left;
+}
+#info_red{
+	background-color:red;
+}
+#info_orange{
+	background-color:orange;
+}
+#info_green{
+	background-color:green;
 }

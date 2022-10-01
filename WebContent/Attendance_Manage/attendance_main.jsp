@@ -15,6 +15,8 @@
 <%@ page import="java.util.*" %>
 <%@ page import="java_class.Close" %>
 <%
+			session.removeAttribute("possi");
+
 			PreparedStatement pstmt = null;
 			ResultSet rs = null;
 			
@@ -120,14 +122,9 @@
 						sb_team_name.append(rs.getString(2)).append(" ");
 						sb_team_cnt.append(rs.getString(3)).append(" ");
 					}
-					if(sb_team_name.toString().equals("")){
-						team_name[x] = "-";
-						team_cnt[x] = "-";
-					}else{
-						team_name[x] = sb_team_name.toString();
-						team_cnt[x] = sb_team_cnt.toString();
-					}
-				}System.out.println(Arrays.toString(team_name));System.out.println(Arrays.toString(team_cnt));
+					team_name[x] = sb_team_name.toString();
+					team_cnt[x] = sb_team_cnt.toString();
+				}
 			}catch(Exception e){
 				e.printStackTrace();
 			}
@@ -210,7 +207,29 @@
 									%>
 									><%=day.get(idx) %></div>
 									<ul class="attendance_ul">
-									////
+										<%
+											int temp_head = 0;
+											//System.out.println(idx+": "+team_name[idx]);
+											
+											if(!team_name[idx].equals("")){
+												String[] temp_team = team_name[idx].split(" ");
+												String[] temp_cnt = team_cnt[idx].split(" ");
+												if(temp_team.length>0){
+													for(int x=0;x<temp_team.length;x++){
+														%>
+														<li class="attendance_li"><label style="width:50px;"><%=temp_team[x] %>조</label><label style="width:40px;">: <%=temp_cnt[x] %>명</label></li>
+														<%
+														temp_head += Integer.parseInt(temp_cnt[x]);
+													}
+												}
+											}
+											
+											if(work_cnt[idx]-temp_head>0){
+												%>
+												<li class="attendance_li"><label style="width:50px;">없음</label><label style="width:40px;">: <%=work_cnt[idx]-temp_head %>명</label></li>
+												<%
+											}
+										%>
 									</ul>
 								</div>
 								<%

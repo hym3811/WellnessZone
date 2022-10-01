@@ -14,8 +14,11 @@
 	<header>
 		<h1>Wellness Zone</h1>
 		<div style="width:350px;height:100px;position:absolute;right:0;top:0;background-color:black;">
+		<div style="position:relative;width:350px;height:100px;">
 			<div class = "header_name"><%=login_name %><label style="font-size:0.6em;"> 님 접속중...</label></div>
 			<div class = "header_clock"></div>
+			<div class="logout" style="font-size:0.5em!important;position:absolute;right:20px;top:20px;" onclick="location.href='../login.jsp'">로그아웃</div>
+		</div>
 		</div>
 	</header>
 <script src="https://code.jquery.com/jquery-3.6.1.min.js"></script>

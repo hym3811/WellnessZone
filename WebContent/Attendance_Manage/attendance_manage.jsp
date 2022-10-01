@@ -6,7 +6,7 @@
 <meta charset="UTF-8">
 <title>Insert title here</title>
 <link rel="stylesheet" href="../style.css">
-<link rel="stylesheet" href="attendance_manage.css">
+<link rel="stylesheet" href="attendance.css">
 </head>
 <body>
 <%@ include file="../header.jsp" %>
@@ -140,9 +140,9 @@
 					for(int i=0;i<size;i++){
 						%>
 							<tr>
-								<td style="width:150px;"><%=position[i] %></td>
-								<td style="width:150px;"><%=name[i] %></td>
-								<td style="width:300px;position:relative;">
+								<td style="width:100px;"><%=position[i] %></td>
+								<td style="width:100px;"><%=name[i] %></td>
+								<td style="width:350px;position:relative;">
 									<%
 										if(enter[i]==null){
 											%>
@@ -194,7 +194,7 @@
 										}
 									%></div>
 								</td>
-								<td style="width:300px;">
+								<td style="width:350px;">
 									<%
 										if(exit[i]==null){
 											if(enter[i]!=null){

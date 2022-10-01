@@ -52,9 +52,14 @@
 					sql = "update wellness_work set team = ?,work = ?,harf=? where year=? and month=? and day=? and id=?";
 					pstmt = conn.prepareStatement(sql);
 					
-					pstmt.setString(1, team[i]);
 					pstmt.setString(2, work[i]);
-					pstmt.setString(3, harf[i]);
+					if(Float.parseFloat(work[i])<1){
+						pstmt.setString(1, team[i]);
+						pstmt.setString(3, harf[i]);
+					}else{
+						pstmt.setString(1, "");
+						pstmt.setString(3, "");
+					}
 					pstmt.setString(4, year);
 					pstmt.setString(5, month);
 					pstmt.setInt(6, i+1);

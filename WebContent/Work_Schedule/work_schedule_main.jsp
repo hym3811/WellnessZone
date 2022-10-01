@@ -17,6 +17,8 @@
 <section>
 	<form name="form" method="post">
 		<%
+			session.removeAttribute("possi");
+		
 			PreparedStatement pstmt = null;
 			ResultSet rs = null;
 			

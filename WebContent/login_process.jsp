@@ -64,7 +64,7 @@
 						session.setAttribute(login_id, "id");
 						%>
 						<script>
-						location.href="Timestamp/timestamp_main.jsp";
+						location.href="Work_Schedule/work_schedule_main.jsp";
 						</script>
 						<%
 						
@@ -102,7 +102,7 @@
 								rs = pstmt.executeQuery();
 								
 								if(!rs.next()){ // 조회값이 없으면 근무표에 아이디 생성 요일에 따라 디폴트값 다름
-									sql = "insert into wellness_work values(?,?,?,?,'','','',?)";
+									sql = "insert into wellness_work values(?,?,?,?,'','','',?,'')";
 									pstmt = conn.prepareStatement(sql);
 									pstmt.setString(1, year);
 									pstmt.setString(2, month);
@@ -140,7 +140,7 @@
 						Close.close(rs);
 						%>
 						<script>
-						location.href="Timestamp/timestamp_main.jsp";
+						location.href="Work_Schedule/work_schedule_main.jsp";
 						</script>
 						<%
 					}

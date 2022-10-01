@@ -17,7 +17,8 @@ create table wellness_account(
 	name varchar2(12) not null,
 	rank char(1) not null,
 	position varchar2(20),
-	out number(1));
+	joindate date,
+	outdate date);
 
 insert into wellness_account values('master','master5580','마스터',1,'마스터계정');
 

@@ -56,6 +56,22 @@ footer{
 	border:1px solid black;
 	margin:calc(25% - 125px) auto 0 auto;
 }
+.logout{
+	width:80px;
+	height:25px;
+	color:black;
+	background-color:white;
+	text-align:center;
+	line-height:22.5px;
+	font-weight:bold;
+	border-radius:10px;
+}
+.logout:hover{
+	box-shadow:0 0 20px 20px red inset;
+	color:white;
+	transition:1s;
+	cursor:pointer;
+}
 .login_line{
 	margin:15px 0;
 	width:300px;

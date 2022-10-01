@@ -8,6 +8,7 @@
 <link rel="stylesheet" href="style.css">
 </head>
 <body>
+<%session.invalidate(); %>
 <form name="form" method="post">
 	<div class="login">
 		<h1 style="text-align:center;">Wellness Zone</h1>
