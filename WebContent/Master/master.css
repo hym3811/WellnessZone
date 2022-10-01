@@ -29,19 +29,74 @@
 	margin:20px auto;
 	border-collapse:collapse;
 }
-#create_account_table  tr{
+#create_account_table tr{
 	height:30px;
 	border-top:1px solid black;
 	border-bottom:1px solid black;
 }
-#create_account_table  tr  th{
+#create_account_table tr th{
 	width:120px;
 	border-right:1px solid black;
 }
-#create_account_table  tr  td{
+#create_account_table tr td{
 	width:250px;
 }
-#create_account_table  tr  td input,select{
+#create_account_table tr td input{
 	margin-left:20px;
 	width:230px;
+}
+#create_account_table tr td select{
+	margin-left:20px;
+	width:230px;
+}
+#select_account_table{
+	margin:0 auto;
+	margin-top:20px;
+	border-collapse:collapse;
+	text-align:center;
+}
+#select_account_table tr{
+	height:35px;
+	border-bottom:1px solid black;
+}
+#select_account_table th{
+	border-right:1px dashed black;
+}
+#select_account_table td{
+	border-right:1px dashed black;
+}
+#delete_account_btn{
+	color:blue;
+	font-weight:bold;
+}
+#delete_account_btn:hover{
+	cursor:pointer;
+	color:red;
+	transition:0.5s;
+}
+#update_account_table{
+	display:none;
+}
+#update_account_table tr{
+	height:30px;
+	border-top:1px solid black;
+	border-bottom:1px solid black;
+}
+#update_account_table tr th{
+	width:120px;
+	border-right:1px solid black;
+}
+#update_account_table tr td{
+	width:250px;
+}
+#update_account_table tr td input{
+	margin-left:20px;
+	width:230px;
+}
+#update_account_table tr td select{
+	margin-left:20px;
+	width:230px;
+}
+#update_save_btn{
+	display:none;
 }

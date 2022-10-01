@@ -157,3 +157,100 @@ function fx_create_account(){
 	doc.action="create_account_process.jsp";
 	doc.submit();
 }
+
+function fx_update_account(){
+	var doc = document.form;
+	
+	//이름 유효성 검사
+	if(doc.update_account_name.value==""){
+		alert("이름을 입력하세요.");
+		doc.update_account_name.focus();
+		return false;
+	}
+	if(check_num.test(doc.update_account_name.value)){
+		alert("이름은 숫자가 포함될 수 없습니다.");
+		doc.update_account_name.focus();
+		return false;
+	}
+	if(check_kor.test(doc.update_account_name.value)){
+		if(doc.update_account_name.value.length>4){
+			alert("한글이름은 4글자 이하로 입력하세요.");
+			doc.update_account_name.focus();
+			return false;
+		}
+	}else{
+		if(doc.update_account_name.value.length>12){
+			alert("영어이름은 12글자 이하로 입력하세요.");
+			doc.update_account_name.focus();
+			return false;
+		}
+	}
+	
+	//비밀번호 유효성 검사
+	if(doc.update_account_pass.value!=""){
+		if(check_kor.test(doc.update_account_pass.value)){
+			alert("비밀번호는 한글을 포함할 수 없습니다.");
+			doc.update_account_pass.focus();
+			return false;
+		}
+		if(!check_eng.test(doc.update_account_pass.value)||!check_num.test(doc.update_account_pass.value)){
+			alert('비밀번호는 영어와 숫자를 조합해야합니다.');
+			doc.update_account_pass.focus();
+			return false;
+		}else{
+			if(doc.update_account_id.value.length>12){
+				alert("비밀번호는 12자리 이하로 입력하세요.");
+				doc.update_account_pass.focus();
+				return false;
+			}
+		}
+		//비번 확인 유효성 검사
+		if(doc.update_account_check.value==""){
+			alert("비번확인를 입력하세요.");
+			doc.update_account_check.focus();
+			return false;
+		}
+		if(check_kor.test(doc.update_account_check.value)){
+			alert("비번확인는 한글을 포함할 수 없습니다.");
+			doc.update_account_check.focus();
+			return false;
+		}
+		if(!check_eng.test(doc.update_account_check.value)||!check_num.test(doc.update_account_check.value)){
+			alert('비번확인는 영어와 숫자를 조합해야합니다.');
+			doc.update_account_check.focus();
+			return false;
+		}else{
+			if(doc.update_account_id.value.length>12){
+				alert("비번확인는 12자리 이하로 입력하세요.");
+				doc.update_account_check.focus();
+				return false;
+			}
+		}
+		
+		//비번,비번확인 일치
+		if(doc.update_account_pass.value!=doc.update_account_check.value){
+			alert("비밀번호와 비번확인이 일치하지 않습니다.");
+			doc.update_account_check.focus();
+			return false;
+		}
+		
+	}
+	
+	
+	//직급 유효성 검사
+	if(doc.update_account_rank.value==""){
+		alert("직급을 선택하세요.");
+		doc.update_account_rank.focus();
+		return false;
+	}
+	
+	//직책 유효성 검사
+	if(doc.update_account_position.value==""){
+		alert("직책을 입력하세요.");
+		doc.update_account_position.focus();
+		return false;
+	}
+	
+	doc.action="update_account_process.jsp";
+	doc.submit();
+}

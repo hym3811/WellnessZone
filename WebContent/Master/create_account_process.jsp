@@ -28,5 +28,5 @@
 	Close.close(pstmt);Close.close(rs);
 %>
 <script>
-location.href="master_main.jsp";
+location.href="master_main.jsp?page=1";
 </script>
