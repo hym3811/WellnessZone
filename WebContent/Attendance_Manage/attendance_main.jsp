@@ -14,8 +14,8 @@
 <%@ include file="../DB.jsp" %>
 <%@ page import="java.util.*" %>
 <%@ page import="java_class.Close" %>
+<script>sessionStorage.removeItem("possi");</script>
 <%
-			session.removeAttribute("possi");
 
 			PreparedStatement pstmt = null;
 			ResultSet rs = null;

@@ -16,8 +16,8 @@
 <%@ page import = "java_class.Close" %>
 <section>
 	<form name="form" method="post">
+	<script>sessionStorage.removeItem("possi");</script>
 		<%
-			session.removeAttribute("possi");
 		
 			PreparedStatement pstmt = null;
 			ResultSet rs = null;

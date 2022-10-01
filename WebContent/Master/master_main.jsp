@@ -43,25 +43,13 @@
 				%>
 				<script>
 				var pass = '<%=rs.getString(2)%>';
-				var cnt = 3;
-				var possi = <%=session.getAttribute("possi")%>
+				var possi = sessionStorage.getItem("possi");
 				if(!possi){
-					while(true){
-						if(prompt('비밀번호 입력하세요.')!=pass){
-							cnt--;
-							alert("비밀번호 불일치\n"+cnt+"회 남음");
-						}else{
-							break;
-							<%
-								session.setAttribute("possi", true);
-							%>
-						}
-						if(cnt==0){
-							break;
-						}
-					}
-					if(cnt==0){
+					if(prompt('비밀번호 입력하세요.')!=pass){
+						alert("비밀번호 불일치");
 						history.back();
+					}else{
+						sessionStorage.setItem("possi",true);
 					}
 				}
 				</script>
