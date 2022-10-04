@@ -87,6 +87,24 @@
 	}catch(Exception e){
 		e.printStackTrace();
 	}
+	
+	ArrayList<String> team_list = new ArrayList<String>();
+	ArrayList<String> teamname_list = new ArrayList<String>();
+	ArrayList<String> entertime_list = new ArrayList<String>();
+	ArrayList<String> exittime_list = new ArrayList<String>();
+	try{
+		String sql = "select team,team_name,enter_time,exit_time from wellness_team";
+		pstmt = conn.prepareStatement(sql);
+		rs = pstmt.executeQuery();
+		while(rs.next()){
+			team_list.add(rs.getString(1));
+			teamname_list.add(rs.getString(2));
+			entertime_list.add(rs.getString(3));
+			exittime_list.add(rs.getString(4));
+		}
+	}catch(Exception e){
+		e.printStackTrace();
+	}
 %>
 <script>
 let id_list = '<%=script_id%>'.split(" ");
@@ -104,9 +122,9 @@ let id_list = '<%=script_id%>'.split(" ");
 				</td>
 				<td class="main_ctg" style="letter-spacing:4px;border-left:1px dashed black;">근무조관리</td>
 				<td>
+					<input class="master_btn" type="button" value="근무조 목록" onclick="view_page('select_team')">
 					<input class="master_btn" type="button" value="근무조 생성" onclick="view_page('create_team')">
 					<input class="master_btn" type="button" value="근무조 수정" onclick="view_page('update_team')">
-					<input class="master_btn" type="button" value="근무조 삭제" onclick="view_page('delete_team')">
 				</td>
 			</tr>
 			<tr class="main_tr">
@@ -127,7 +145,7 @@ let id_list = '<%=script_id%>'.split(" ");
 		</table>
 		
 		<!-- @@@@@계정관리@@@@@ -->
-		<!-- 계정생성 -->
+		<!-- 계정생성 page_num=1 -->
 		<div class="master_content" id="select_account" <%
 			if(page_num==1){
 				%>style="display:block;"<%
@@ -161,7 +179,7 @@ let id_list = '<%=script_id%>'.split(" ");
 				%>
 			</table>
 		</div>
-		<!-- 계정생성 -->
+		<!-- 계정생성 page_num=2 -->
 		<div class="master_content" id="create_account">
 			<h4 class="content_title">계정 생성</h4>
 			
@@ -211,7 +229,7 @@ let id_list = '<%=script_id%>'.split(" ");
 			<input type="button" value="계정 생성 저장" style="margin-left:600px;" onclick="fx_create_account()">
 		</div>
 		
-		<!-- 계정수정 -->
+		<!-- 계정수정 page_num=3 -->
 		<div class="master_content" id="update_account" <%
 			if(page_num==3){
 				%>style="display:block;"<%
@@ -309,26 +327,94 @@ let id_list = '<%=script_id%>'.split(" ");
 		
 		
 		<!-- @@@@@근무조관리@@@@@ -->
+		<!-- 근무조 목록 page_num=4 -->
+		<div class="master_content" id="select_team" <%
+			if(page_num==4){
+				%>style="display:block;"<%
+			}
+		%>>
+			<h4 class="content_title">근무조 목록</h4>
+			<table border=1 id="select_team_table">
+				<tr>
+					<th>근무조 코드</th>
+					<th>근무조 이름</th>
+					<th>출근시간</th>
+					<th>퇴근시간</th>
+					<th>수정</th>
+					<th>삭제</th>
+				</tr>
+				<%
+					for(int i=0; i<team_list.size();i++){
+						%>
+						<tr>
+							<td><%=team_list.get(i) %></td>
+							<td><%=teamname_list.get(i) %></td>
+							<td><%=entertime_list.get(i) %></td>
+							<td><%=exittime_list.get(i) %></td>
+							<td><a href="#" onclick="location.href='master_main.jsp?page=6&team=<%=team_list.get(i)%>'">수정</a></td>
+							<td><a href="#" onclick="alert('<%=teamname_list.get(i)%>조: 삭제')">삭제</a></td>
+						</tr>
+						<%
+					}
+				%>
+			</table>
+		</div>
+		
 		<!-- 근무조 생성 -->
 		<div class="master_content" id="create_team">
 			<h4 class="content_title">근무조 생성</h4>
 			/////////////
 		</div>
 		
-		<!-- 근무조 수정 -->
-		<div class="master_content" id="update_team">
+		<!-- 근무조 수정 page_num=6 -->
+		<div class="master_content" id="update_team" <%
+			if(page_num==6){
+				%>style="display:block;"<%
+			}
+		%>>
 			<h4 class="content_title">근무조 수정</h4>
-			/////////////
+			<table border=1>
+				<tr>
+					<th>근무조 이름</th>
+					<td>
+						<input type="hidden" name="update_team" value="<%=request.getParameter("team")%>">
+						<input type="text" name="update_teamname" value="<%=request.getParameter("team")!=null ? teamname_list.get(team_list.indexOf(request.getParameter("team"))) : ""%>">
+					</td>
+				</tr>
+				<tr>
+					<th>출근시간</th>
+					<td>
+						<select name="enter_hour">
+							<option value="">시간 선택
+							<%
+								for(int i=6;i<24;i++){
+									%>
+									<option value="<%=i<10 ? "0"+Integer.toString(i) : i %>" <%=request.getParameter("team")!=null ? 
+										(
+												i<10 ?(("0"+Integer.toString(i)).equals(entertime_list.get(team_list.indexOf(request.getParameter("team"))).substring(0,2)) ? "selected" : ""):((Integer.toString(i)).equals(entertime_list.get(team_list.indexOf(request.getParameter("team"))).substring(0,2)) ? "selected" : "")
+									) : ""%>><%=i<10 ? ("0"+Integer.toString(i)) : i %> 시
+									<%
+								}
+							%>
+						</select>
+						<select name="enter_minute">
+							<option value="">분 선택
+							<%
+								for(int i=0;i<60;i+=5){
+									%>
+									<option value="<%=i<10 ? "0"+Integer.toString(i) : i %>" <%=request.getParameter("team")!=null ?
+										(i<10 ? (	("0"+Integer.toString(i)).equals(entertime_list.get(team_list.indexOf(request.getParameter("team"))).substring(3)) ? "selected" : ""):((Integer.toString(i)).equals(entertime_list.get(team_list.indexOf(request.getParameter("team"))).substring(3)) ? "selected" : ""	)
+									) : ""%>><%=i<10 ? "0"+Integer.toString(i) : i %> 분
+									<%
+								}
+							%>
+						</select>
+					</td>
+				</tr>
+			</table>
 		</div>
 		
-		<!-- 근무조 삭제 -->
-		<div class="master_content" id="delete_team">
-			<h4 class="content_title">근무조 삭제</h4>
-			/////////////
-		</div>
 		<!-- @@@@@-@@@@@ -->
-		
-		
 		
 		<!-- @@@@@프로그램관리@@@@@ -->
 		<!-- 프로그램 생성 -->

@@ -15,7 +15,7 @@ function hide_all(){
 	$('#delete_account').css({"display":"none"});
 	$('#create_team').css({"display":"none"});
 	$('#update_team').css({"display":"none"});
-	$('#delete_team').css({"display":"none"});
+	$('#select_team').css({"display":"none"});
 	$('#create_program').css({"display":"none"});
 	$('#update_program').css({"display":"none"});
 	$('#delete_program').css({"display":"none"});
