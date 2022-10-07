@@ -124,7 +124,6 @@ let id_list = '<%=script_id%>'.split(" ");
 				<td>
 					<input class="master_btn" type="button" value="근무조 목록" onclick="view_page('select_team')">
 					<input class="master_btn" type="button" value="근무조 생성" onclick="view_page('create_team')">
-					<input class="master_btn" type="button" value="근무조 수정" onclick="view_page('update_team')">
 				</td>
 			</tr>
 			<tr class="main_tr">
@@ -392,7 +391,7 @@ let id_list = '<%=script_id%>'.split(" ");
 									<option value="<%=i<10 ? "0"+Integer.toString(i) : i %>" <%=request.getParameter("team")!=null ? 
 										(
 												i<10 ?(("0"+Integer.toString(i)).equals(entertime_list.get(team_list.indexOf(request.getParameter("team"))).substring(0,2)) ? "selected" : ""):((Integer.toString(i)).equals(entertime_list.get(team_list.indexOf(request.getParameter("team"))).substring(0,2)) ? "selected" : "")
-									) : ""%>><%=i<10 ? ("0"+Integer.toString(i)) : i %> 시
+									) : ""%>><%=i<10 ? ("오전 "+Integer.toString(i)) : (i<12 ? "오전 "+Integer.toString(i) : (i==12 ? "오후 "+Integer.toString(i) : "오후 "+Integer.toString(i-12))) %> 시
 									<%
 								}
 							%>
@@ -411,7 +410,38 @@ let id_list = '<%=script_id%>'.split(" ");
 						</select>
 					</td>
 				</tr>
+				<tr>
+					<th>퇴근시간</th>
+					<td>
+						<select name="exit_hour">
+							<option value="">시간 선택
+							<%
+								for(int i=6;i<24;i++){
+									%>
+									<option value="<%=i<10 ? "0"+Integer.toString(i) : i %>" <%=request.getParameter("team")!=null ? 
+										(
+												i<10 ?(("0"+Integer.toString(i)).equals(exittime_list.get(team_list.indexOf(request.getParameter("team"))).substring(0,2)) ? "selected" : ""):((Integer.toString(i)).equals(exittime_list.get(team_list.indexOf(request.getParameter("team"))).substring(0,2)) ? "selected" : "")
+									) : ""%>><%=i<10 ? ("오전 "+Integer.toString(i)) : (i<12 ? "오전 "+Integer.toString(i) : (i==12 ? "오후 "+Integer.toString(i) : "오후 "+Integer.toString(i-12))) %> 시
+									<%
+								}
+							%>
+						</select>
+						<select name="exit_minute">
+							<option value="">분 선택
+							<%
+								for(int i=0;i<60;i+=5){
+									%>
+									<option value="<%=i<10 ? "0"+Integer.toString(i) : i %>" <%=request.getParameter("team")!=null ?
+										(i<10 ? (	("0"+Integer.toString(i)).equals(exittime_list.get(team_list.indexOf(request.getParameter("team"))).substring(3)) ? "selected" : ""):((Integer.toString(i)).equals(exittime_list.get(team_list.indexOf(request.getParameter("team"))).substring(3)) ? "selected" : ""	)
+									) : ""%>><%=i<10 ? "0"+Integer.toString(i) : i %> 분
+									<%
+								}
+							%>
+						</select>
+					</td>
+				</tr>
 			</table>
+			<input type="button" value="저장" onclick="fx_update_team()">
 		</div>
 		
 		<!-- @@@@@-@@@@@  -->

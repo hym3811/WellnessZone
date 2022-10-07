@@ -254,3 +254,40 @@ function fx_update_account(){
 	doc.action="update_account_process.jsp";
 	doc.submit();
 }
+
+function fx_update_team(){
+	var doc = document.form;
+	
+	if(doc.update_teamname.value==""){
+		alert("근무조 이름을 입력하세요.");
+		doc.update_teamname.focus();
+		return false;
+	}
+	if(doc.enter_hour.value==""){
+		alert("출근시간(시)를 선택하세요.");
+		doc.enter_hour.focus();
+		return false;
+	}
+	if(doc.enter_minute.value==""){
+		alert("출근시간(분)을 선택하세요.");
+		doc.enter_minute.focus();
+		return false;
+	}
+	if(doc.exit_hour.value==""){
+		alert("퇴근시간(시)를 선택하세요.");
+		doc.exit_hour.focus();
+		return false;
+	}
+	if(doc.exit_minute.value==""){
+		alert("퇴근시간(분)을 선택하세요.");
+		doc.exit_minute.focus();
+		return false;
+	}
+	var enter = parseInt(doc.enter_hour.value)*60 + parseInt(doc.enter_minute.value);
+	var exit = parseInt(doc.exit_hour.value)*60 + parseInt(doc.exit_minute.value);
+	if(exit-enter<=0){
+		alert("퇴근시간이 출근시간과 같거나 더 빠릅니다.");
+		doc.exit_hour.focus();
+		return false;
+	}
+}
